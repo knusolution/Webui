@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import Modify_sys_Modal from './Modify_sys_Modal';
 import styled from 'styled-components';
 
 
@@ -23,6 +25,8 @@ const SystemInfoBar = styled.div`
 `;
 
 const Title = styled.h1`
+  font-size: 45px;
+  font-weight: normal;
   text-align: center;
   margin-top: 80px;
   margin-bottom: 80px;
@@ -111,7 +115,7 @@ const ButtonGroup = styled.div`
   left: 0;
   right: 0;
 
-  button {
+  .group-button {
     padding: 10px 30px;
     border: none;
     border-radius: 4px;
@@ -123,6 +127,7 @@ const ButtonGroup = styled.div`
 
     &:first-child {
       background-color: #dae0e7;
+      color: white;
     }
 
     &:last-child {
@@ -140,6 +145,7 @@ const RequiredSpan = styled.span`
 `;
 
 const Modify_sys = () => {
+    const [isModalOpen, setModalOpen] = useState(false);
   return (
     <Container>
       <Title>정보 수정</Title>
@@ -203,8 +209,9 @@ const Modify_sys = () => {
         </FormRow>
       </Form>
       <ButtonGroup>
-        <button>취소</button>
-        <button>수정하기</button>
+        <button className="group-button">취소</button>
+        <button className="group-button" onClick={() => setModalOpen(true)}>수정하기</button>
+      {isModalOpen && <Modify_sys_Modal closeModal={() => setModalOpen(false)} />}
       </ButtonGroup>
     </Container>
   );
