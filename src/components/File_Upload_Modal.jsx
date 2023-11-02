@@ -18,7 +18,7 @@ const ModalContainer = styled.div`
   padding: 0px;
   border-radius: 10px;
   width: 600px;
-  height: 200px;
+  height: 400px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   position: relative;
     &::after {
@@ -104,13 +104,74 @@ const CloseButton = styled.button`
   }
 `;
 
-const Modify_sys_Modal = ({ closeModal }) => {
+const RadioGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: -10px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+`;
+
+const RadioButton = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  label {
+    margin-left: 10px;
+  }
+`;
+
+const FileUpload = styled.div`
+  margin-top: 10px;
+  margin-left: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="file"] {
+    margin-top: 10px;
+    display: block;
+    padding: 5px;
+    width: 250px;
+    font-size: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+`;
+
+const File_Upload_Modal = ({ closeModal }) => {
   return (
     <ModalOverlay onClick={closeModal}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
-        <ModalTitle>시스템 정보 수정</ModalTitle>
-        <ModalContent>선택하신 시스템 정보를 수정 하시겠습니까?</ModalContent>
+        <ModalTitle>파일 업로드</ModalTitle>
+        <ModalContent>등록할 파일 종류를 선택하세요</ModalContent>
+        <RadioGroup>
+          <RadioButton>
+            <input type="radio" name="system_info" value="option1" />
+            <label>DB표준 정의서</label>
+          </RadioButton>
+          <RadioButton>
+            <input type="radio" name="system_info" value="option2" />
+            <label>DB표준 도메인</label>
+          </RadioButton>
+          <RadioButton>
+            <input type="radio" name="system_info" value="option3" />
+            <label>DB표준 단어</label>
+          </RadioButton>
+          <RadioButton>
+            <input type="radio" name="system_info" value="option4" />
+            <label>DB표준 코드</label>
+          </RadioButton>
+        </RadioGroup>
+        <FileUpload>
+          <label>업로드 파일을 선택해주세요.</label>
+          <input type="file" />
+        </FileUpload>
         <ButtonGroup>
           <button className="modal-group-button" onClick={closeModal}>취소하기</button>
           <button className="modal-group-button">수정하기</button>
@@ -120,9 +181,9 @@ const Modify_sys_Modal = ({ closeModal }) => {
   );
 };
 
-Modify_sys_Modal.propTypes = {
+File_Upload_Modal.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };
 
 
-export default Modify_sys_Modal;
+export default File_Upload_Modal;

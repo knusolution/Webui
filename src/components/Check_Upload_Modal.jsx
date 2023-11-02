@@ -18,7 +18,7 @@ const ModalContainer = styled.div`
   padding: 0px;
   border-radius: 10px;
   width: 600px;
-  height: 200px;
+  height: 700px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   position: relative;
     &::after {
@@ -104,25 +104,115 @@ const CloseButton = styled.button`
   }
 `;
 
-const Modify_sys_Modal = ({ closeModal }) => {
+const RadioGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: -10px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+`;
+
+const RadioButton = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-right: 20px;
+
+  label {
+    margin-left: 10px;
+  }
+
+  .approve-label {
+    color: #4dd392;
+  }
+
+  .reject-label {
+    color: red;
+  }
+`;
+
+const FileUpload = styled.div`
+  margin-top: 10px;
+  margin-left: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="file"] {
+    margin-top: 10px;
+    display: block;
+    padding: 5px;
+    width: 250px;
+    font-size: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 80%;
+  height: 150px;
+  resize: none;
+  padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+ 
+  &:focus {
+    outline: none;
+    border-color: #007fff;
+  }
+
+  &::placeholder {
+    line-height: 150px;
+    text-indent: 35%;
+  }
+
+  &:not(:placeholder-shown) {
+    line-height: normal;
+  }
+`;
+
+const Check_Upload_Modal = ({ closeModal }) => {
   return (
     <ModalOverlay onClick={closeModal}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
-        <ModalTitle>시스템 정보 수정</ModalTitle>
-        <ModalContent>선택하신 시스템 정보를 수정 하시겠습니까?</ModalContent>
+        <ModalTitle>검토</ModalTitle>
+        <ModalContent>검토 결과를 선택하여 주세요</ModalContent>
+        <RadioGroup>
+          <RadioButton>
+            <input type="radio" name="system_info" value="option1" />
+            <label className="approve-label">승인</label>
+          </RadioButton>
+          <RadioButton>
+            <input type="radio" name="system_info" value="option2" />
+            <label className="reject-label">반려</label>
+          </RadioButton>
+        </RadioGroup>
+        <ModalContent>검토 결과 상세내역을 입력하여 주세요</ModalContent>
+        <TextArea placeholder="상세 내역을 입력하세요." />
+        <FileUpload>
+          <label>업로드 파일을 선택해주세요.</label>
+          <input type="file" />
+        </FileUpload>
         <ButtonGroup>
-          <button className="modal-group-button" onClick={closeModal}>취소하기</button>
-          <button className="modal-group-button">수정하기</button>
+          <button className="modal-group-button" onClick={closeModal}>취소</button>
+          <button className="modal-group-button">수정</button>
         </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>
   );
 };
 
-Modify_sys_Modal.propTypes = {
+Check_Upload_Modal.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };
 
 
-export default Modify_sys_Modal;
+export default Check_Upload_Modal;

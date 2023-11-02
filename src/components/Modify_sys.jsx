@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import Modify_sys_Modal from './Modify_sys_Modal';
+
 import styled from 'styled-components';
+import Check_Upload_Modal from './Check_Upload_Modal';
 
 
 const Container = styled.div`
@@ -211,7 +212,7 @@ const Modify_sys = () => {
       <ButtonGroup>
         <button className="group-button">취소</button>
         <button className="group-button" onClick={() => setModalOpen(true)}>수정하기</button>
-      {isModalOpen && <Modify_sys_Modal closeModal={() => setModalOpen(false)} />}
+      {isModalOpen && <Check_Upload_Modal closeModal={() => setModalOpen(false)} />}
       </ButtonGroup>
     </Container>
   );
