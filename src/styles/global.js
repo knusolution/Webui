@@ -1,5 +1,11 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
-    margin: auto;
+    /* :root {
+        width: 100%;
+        max-width: 1280px;
+    } */
+    body {
+        margin: 0;
+    }
 `;

@@ -1,9 +1,17 @@
-const Admin = () => {
+import React from 'react';
+import Header from '@components/header/Header'
+
+
+
+
+
+export default function Admin() {
     return (
-      <div>
-        관리자 페이지
-      </div>
+        <>
+            <Header></Header>
+            
+    
+        </>
     );
-  };
-  
-  export default Admin;
+}
+
