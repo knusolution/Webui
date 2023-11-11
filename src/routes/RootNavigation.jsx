@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import MainNavigation from "./MainNavigation";
 import LoginNavigation from "./LoginNavigation";
 import { useToken } from "@hooks/useToken";
-import Admin from "@components/Admin";
+import Admin from "@components/admin/Admin";
 import System from "@components/System";
 
 const RootNavigation = () => {

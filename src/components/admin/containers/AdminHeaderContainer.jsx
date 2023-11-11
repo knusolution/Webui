@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "/assets/images/logo.png"
 import { useState } from "react";
 import styled from "styled-components";
-import Dropdown from "@components/common/dropdown/Dropdown";
+import Dropdown from "@components/common/Dropdown";
 
 
 const Header = styled.div`

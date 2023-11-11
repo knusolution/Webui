@@ -1,7 +1,6 @@
 import React from 'react';
-
 import styled from 'styled-components';
-import Data from '../../../src/Data.json'
+import Data from '../../../Data.json';
 
 
 const Boarddiv = styled.div`
@@ -55,7 +54,6 @@ const Tbodytr = styled.tr`
 
 
 export default function Table() {
-
     return (
       <Boarddiv>
         <table>
@@ -87,7 +85,6 @@ export default function Table() {
             ))}
           </tbody>
         </table>
-
       </Boarddiv>
     );
 }
