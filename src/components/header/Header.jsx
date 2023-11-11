@@ -55,7 +55,6 @@ const Navdiv = styled.div`
 
 const Admin = () => {
     const [view, setView] = useState(false);
-    const [view2, setView2] = useState(false);
     return (
       <Header>
         <Navdiv>
@@ -64,24 +63,16 @@ const Admin = () => {
           </Link>
 
           <nav>
+            <button>계정등록</button>
+
             <span
               onClick={() => {
                 setView(!view);
               }}
             >
-              관리시스템 {view ? "∧" : "∨"}
+              JSON님 {view ? "∧" : "∨"}
             </span>
-
-            <button>계정등록</button>
-
-            <span
-              onClick={() => {
-                setView2(!view2);
-              }}
-            >
-              JSON님 {view2 ? "∧" : "∨"}
-            </span>
-            {view2 && <Dropdown></Dropdown>}
+            {view && <Dropdown></Dropdown>}
           </nav>
         </Navdiv>
       </Header>
