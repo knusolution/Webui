@@ -53,7 +53,7 @@ const Tbodytr = styled.tr`
 `
 
 
-export default function Table() {
+export default function AdminBorderContainer() {
     return (
       <Boarddiv>
         <table>

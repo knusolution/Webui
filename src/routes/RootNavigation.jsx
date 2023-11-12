@@ -3,7 +3,7 @@ import MainNavigation from "./MainNavigation";
 import LoginNavigation from "./LoginNavigation";
 import { useToken } from "@hooks/useToken";
 import Admin from "@components/admin/Admin";
-import System from "@components/System";
+import System from "@components/system/System";
 
 const RootNavigation = () => {
   const { getToken } = useToken();
