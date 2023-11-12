@@ -13,7 +13,7 @@ export default function Admin() {
         <>
             <AdminHeaderContainer></AdminHeaderContainer>
             <AdminSearchContainer></AdminSearchContainer>
-            <AdminBoardContainer></AdminBoardContainer>
+            <AdminBoardContainer title="[전체 게시판]"></AdminBoardContainer>
         </>
     );
 }

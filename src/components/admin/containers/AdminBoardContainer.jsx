@@ -6,6 +6,7 @@ import Data from '../../../Data.json';
 const Boarddiv = styled.div`
   display: flex;
   justify-content: center;
+  margin-bottom: 30px;
   table {
     width: 100%;
     max-width: 1280px;
@@ -15,6 +16,7 @@ const Boarddiv = styled.div`
     caption {
         text-align: left;
         margin-bottom: 30px;
+        font-weight: bolder;
     }
   }
   thead {
@@ -53,11 +55,11 @@ const Tbodytr = styled.tr`
 `
 
 
-export default function AdminBorderContainer() {
+export default function AdminBorderContainer(props) {
     return (
       <Boarddiv>
         <table>
-          <caption>[전체 게시판]</caption>
+          <caption>{props.title}</caption>
           <thead>
             <tr>
               <th>차수</th>
