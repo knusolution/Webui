@@ -1,5 +1,9 @@
+import Login from "@components/login/Login";
+
 const LoginNavigation = () => {
-  return <div>LoginNavigation</div>;
+  return <>
+    <Login></Login>
+  </>;
 };
 
 export default LoginNavigation;

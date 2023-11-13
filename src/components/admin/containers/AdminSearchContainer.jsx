@@ -18,6 +18,7 @@ const SearchFilter = styled.div`
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     font-size: medium;
+    cursor: pointer;
   }
   input {
     border: 2px solid #e5eaf2;
