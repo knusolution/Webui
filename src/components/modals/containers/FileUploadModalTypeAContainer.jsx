@@ -155,19 +155,19 @@ const FileUploadModalTypeAContainer = ({ closeModal }) => {
         <RadioGroup>
           <RadioButton>
             <input type="radio" name="FileType" value="option1" />
-            <label>DB표준 정의서</label>
+            <label>DB 표준용어</label>
           </RadioButton>
           <RadioButton>
             <input type="radio" name="FileType" value="option2" />
-            <label>DB표준 도메인</label>
+            <label>DB 표준도메인</label>
           </RadioButton>
           <RadioButton>
             <input type="radio" name="FileType" value="option3" />
-            <label>DB표준 단어</label>
+            <label>DB 표준단어</label>
           </RadioButton>
           <RadioButton>
             <input type="radio" name="FileType" value="option4" />
-            <label>DB표준 코드</label>
+            <label>DB 표준코드</label>
           </RadioButton>
         </RadioGroup>
         <FileUpload>

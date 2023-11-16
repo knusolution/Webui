@@ -167,7 +167,7 @@ const FileUploadModalTypeBContainer = ({ closeModal }) => {
           </RadioButton>
           <RadioButton>
             <input type="radio" name="FileType" value="option4" />
-            <label>관계 정의서(ERD)</label>
+            <label>ERD & 관계정의서</label>
           </RadioButton>
         </RadioGroup>
         <FileUpload>
