@@ -2,34 +2,42 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    max-width: 100%;
+  }
 `;
 
 const ModalContainer = styled.div`
-  background-color: white;
-  padding: 0px;
-  border-radius: 10px;
-  width: 600px;
-  height: 700px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-  position: relative;
+  &.modal-container {
+    background-color: white;
+    padding: 0px;
+    border-radius: 10px;
+    width: 600px;
+    height: 700px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    position: relative;
     &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-color: #3b4a59; // 원하는 선의 색상
-    position: absolute;
-    top: 50px; // 적절한 위치에 조절하여 가로선을 배치합니다. 이 값은 예시입니다.
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: #3b4a59;
+      position: absolute;
+      top: 50px;
+    }
   }
+
+
 `;
 
 const ModalTitle = styled.h2`
@@ -49,85 +57,97 @@ const ModalContent = styled.p`
 `;
 
 const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  padding: 10px 30px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  .modal-group-button {
+  &.button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
     padding: 10px 30px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 300px;
-    height: 35px;
-      
-    &:first-child {
-      margin-left: 0px;
-      background-color: #7B91A7;
-      color: white;
-    }
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    .modal-group-button {
 
-    &:last-child {
-      margin-right: 0px;
-      background-color: #003a75;
-      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+      margin-right: 10px;
+      width: 300px;
+      height: 35px;
+        
+      &:first-child {
+        margin-left: 0px;
+        background-color: #7B91A7;
+        color: black;
+      }
+  
+      &:last-child {
+        margin-right: 0px;
+        background-color: #003a75;
+        color: white;
+      }
     }
   }
+
+  
 
 `;
 
 
 const CloseButton = styled.button`
-  background-color: transparent;
-  border: none;
-  position: absolute;
-  right: 25px;
-  top: 10px;
-  font-size: 24px;
-  width: 10px ;
-  cursor: pointer;
-  color: #000000;
-  padding: 5px;
-  line-height: 1;
-  display: inline-block;
-  transition: 0.3s;
 
+  &.modal-close-button {
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    right: 25px;
+    top: 10px;
+    font-size: 24px;
+    width: 10px ;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    display: inline-block;
+    transition: 0.3s;
+    color: #000000;
+  }
   &:hover {
     color: #007fff;
   }
 `;
 
 const RadioGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: -10px;
-  margin-left: 20px;
-  margin-bottom: 20px;
+  &.radio-group {
+    display: flex;
+    flex-direction: row;
+    margin-top: -10px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: auto;
+  }
 `;
 
 const RadioButton = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  margin-right: 20px;
+  &.radio-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    width: auto;
 
-  label {
-    margin-left: 10px;
-  }
+    label {
+      margin-left: 10px;
+    }
 
-  .approve-label {
-    color: #4dd392;
-  }
+    .approve-label {
+      color: #4dd392;
+    }
 
-  .reject-label {
-    color: red;
+    .reject-label {
+      color: red;
+    }
   }
 `;
 
@@ -149,6 +169,12 @@ const FileUpload = styled.div`
     border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  input[type="file"]::file-selector-button {
+    background-color: #D9D9D9;
+    border-radius: 5px;
+    border: 1px solid #101418;
   }
 `;
 
@@ -180,18 +206,18 @@ const TextArea = styled.textarea`
 
 const CheckUploadModalContainer = ({ closeModal }) => {
   return (
-    <ModalOverlay onClick={closeModal}>
-      <ModalContainer onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={closeModal}>&times;</CloseButton>
+    <ModalOverlay className="modal-overlay" onClick={closeModal}>
+      <ModalContainer className="modal-container" onClick={(e) => e.stopPropagation()}>
+        <CloseButton className="modal-close-button" onClick={closeModal}>&times;</CloseButton>
         <ModalTitle>검토</ModalTitle>
         <ModalContent>검토 결과를 선택하여 주세요</ModalContent>
-        <RadioGroup>
-          <RadioButton>
-            <input type="radio" name="system_info" value="option1" />
+        <RadioGroup className="radio-group">
+          <RadioButton className="radio-button">
+            <input type="radio" name="Result" value="option1" />
             <label className="approve-label">승인</label>
           </RadioButton>
-          <RadioButton>
-            <input type="radio" name="system_info" value="option2" />
+          <RadioButton className="radio-button">
+            <input type="radio" name="Result" value="option2" />
             <label className="reject-label">반려</label>
           </RadioButton>
         </RadioGroup>
@@ -201,9 +227,9 @@ const CheckUploadModalContainer = ({ closeModal }) => {
           <label>업로드 파일을 선택해주세요.</label>
           <input type="file" />
         </FileUpload>
-        <ButtonGroup>
+        <ButtonGroup className="button-group">
           <button className="modal-group-button" onClick={closeModal}>취소</button>
-          <button className="modal-group-button">수정</button>
+          <button className="modal-group-button">확인</button>
         </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>
