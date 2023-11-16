@@ -1,6 +1,8 @@
 import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Data from '../../../Data.json';
+import CheckUploadModal from '@components/modals/CheckUploadModal';
 
 
 const Boarddiv = styled.div`
@@ -56,6 +58,7 @@ const Tbodytr = styled.tr`
 
 
 export default function AdminBorderContainer(props) {
+  const [isModalOpen, setModalOpen] = useState(false);
     return (
       <Boarddiv>
         <table>
@@ -81,7 +84,8 @@ export default function AdminBorderContainer(props) {
                 <td>{n.decline}</td>
                 <td>
                   <span>{n.decline_file_name}</span>
-                  <button>검토</button>
+                  <button onClick={() => setModalOpen(true)}>검토</button>
+      {isModalOpen && <CheckUploadModal closeModal={() => setModalOpen(false)} />}
                 </td>
               </Tbodytr>
             ))}
