@@ -26,9 +26,9 @@ const ModalContainer = styled.div`
     display: block;
     width: 100%;
     height: 1px;
-    background-color: #3b4a59; // 원하는 선의 색상
+    background-color: #3b4a59;
     position: absolute;
-    top: 50px; // 적절한 위치에 조절하여 가로선을 배치합니다. 이 값은 예시입니다.
+    top: 50px;
   }
 `;
 
@@ -71,7 +71,7 @@ const ButtonGroup = styled.div`
     &:first-child {
       margin-left: 0px;
       background-color: #7B91A7;
-      color: white;
+      color: black;
     }
 
     &:last-child {
@@ -85,20 +85,22 @@ const ButtonGroup = styled.div`
 
 
 const CloseButton = styled.button`
-  background-color: transparent;
-  border: none;
-  position: absolute;
-  right: 25px;
-  top: 10px;
-  font-size: 24px;
-  width: 10px ;
-  cursor: pointer;
-  color: #000000;
-  padding: 5px;
-  line-height: 1;
-  display: inline-block;
-  transition: 0.3s;
 
+  &.ModalCloseButton {
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    right: 25px;
+    top: 10px;
+    font-size: 24px;
+    width: 10px ;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    display: inline-block;
+    transition: 0.3s;
+    color: #000000;
+  }
   &:hover {
     color: #007fff;
   }
@@ -143,29 +145,29 @@ const FileUpload = styled.div`
   }
 `;
 
-const FileUploadModalContainer = ({ closeModal }) => {
+const FileUploadModalTypeBContainer = ({ closeModal }) => {
   return (
     <ModalOverlay onClick={closeModal}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={closeModal}>&times;</CloseButton>
+      <CloseButton className="ModalCloseButton" onClick={closeModal}>&times;</CloseButton>
         <ModalTitle>파일 업로드</ModalTitle>
         <ModalContent>등록할 파일 종류를 선택하세요</ModalContent>
         <RadioGroup>
           <RadioButton>
-            <input type="radio" name="system_info" value="option1" />
-            <label>DB표준 정의서</label>
+            <input type="radio" name="FileType" value="option1" />
+            <label>데이터베이스 정의서</label>
           </RadioButton>
           <RadioButton>
-            <input type="radio" name="system_info" value="option2" />
-            <label>DB표준 도메인</label>
+            <input type="radio" name="FileType" value="option2" />
+            <label>테이블 정의서</label>
           </RadioButton>
           <RadioButton>
-            <input type="radio" name="system_info" value="option3" />
-            <label>DB표준 단어</label>
+            <input type="radio" name="FileType" value="option3" />
+            <label>컬럼 정의서</label>
           </RadioButton>
           <RadioButton>
-            <input type="radio" name="system_info" value="option4" />
-            <label>DB표준 코드</label>
+            <input type="radio" name="FileType" value="option4" />
+            <label>관계 정의서(ERD)</label>
           </RadioButton>
         </RadioGroup>
         <FileUpload>
@@ -173,17 +175,17 @@ const FileUploadModalContainer = ({ closeModal }) => {
           <input type="file" />
         </FileUpload>
         <ButtonGroup>
-          <button className="modal-group-button" onClick={closeModal}>취소하기</button>
-          <button className="modal-group-button">수정하기</button>
+          <button className="modal-group-button" onClick={closeModal}>취소</button>
+          <button className="modal-group-button">확인</button>
         </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>
   );
 };
 
-FileUploadModalContainer.propTypes = {
+FileUploadModalTypeBContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };
 
 
-export default FileUploadModalContainer;
+export default FileUploadModalTypeBContainer;
