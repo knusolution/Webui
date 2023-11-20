@@ -11,7 +11,7 @@ const Boarddiv = styled.div`
   margin-bottom: 30px;
   table {
     width: 100%;
-    max-width: 1280px;
+    max-width: 1000px;
     border-collapse: collapse;
     border-spacing: 0;
 
