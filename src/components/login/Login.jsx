@@ -14,7 +14,7 @@ const LoginBox = styled.div`
   max-width: 450px;
   border: 2px solid #7b91a7;
   border-radius: 10px;
-  margin-top: 10rem;
+  margin-top: 7%;
   img {
     width: auto;
     height: 80px;
