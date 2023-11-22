@@ -7,6 +7,7 @@ const SidebarUL = styled.ul`
     padding-left: 1rem;
     position: absolute;
     top: 25%;
+    position: fixed;
     li {
         font-size: 13px;
         margin-bottom: 10px;
