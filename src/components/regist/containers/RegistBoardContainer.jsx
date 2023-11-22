@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import modify from "/assets/images/modify.png";
 import RegistSysModal from '@components/regist/RegistSysModal';
+import { useNavigate } from "react-router-dom";
 
 
 const PageContainer = styled.div`
@@ -165,6 +166,8 @@ const RequiredSpan = styled.span`
 
 const RegistBoardContainer = () => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
+
   return (
     <PageContainer>
       <Title>시스템 등록</Title>
@@ -225,7 +228,7 @@ const RegistBoardContainer = () => {
           </FormRow>
         </Form>
         <ButtonGroup>
-          <button className="group-button">취소</button>
+          <button className="group-button"  onClick={()=> {navigate(-1)}}>취소</button>
           <button className="group-button" onClick={() => setModalOpen(true)}>등록하기</button>
         {isModalOpen && <RegistSysModal closeModal={() => setModalOpen(false)} />}
         </ButtonGroup>

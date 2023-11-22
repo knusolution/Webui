@@ -3,6 +3,7 @@ import logo from "/assets/images/logo.png"
 import { useState } from "react";
 import styled from "styled-components";
 import Dropdown from "@components/common/Dropdown";
+import { useNavigate } from "react-router-dom";
 
 
 const Header = styled.div`
@@ -55,6 +56,7 @@ const Navdiv = styled.div`
 
 const Admin = () => {
     const [view, setView] = useState(false);
+    const navigate = useNavigate();
     return (
       <Header>
         <Navdiv>
@@ -63,7 +65,7 @@ const Admin = () => {
           </Link>
 
           <nav>
-            <button>계정등록</button>
+            <button onClick={()=> {navigate("/regist")}}>계정등록</button>
 
             <span
               onClick={() => {
