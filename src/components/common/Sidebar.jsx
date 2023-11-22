@@ -26,8 +26,7 @@ const SNavLink = styled(NavLink)`
 export default function Sidebar() {
     const systemname = [
         {name: "공지사항", path: "/admin"},
-        {name: "경상북도 지도기반 통계정보시스템", path: "/system"},
-        {name: "경상북도 xxx 시스템", path: "/system/0"}
+        {name: "경상북도 지도기반 통계정보시스템", path: "/system"}
     ];
     return (
       <SidebarUL>
