@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Dropmenu = styled.div`
@@ -21,14 +22,21 @@ const Dropmenu = styled.div`
         margin: 0;
         padding: 0;
     }
+    li {
+        cursor: pointer;
+    }
+    &.active {
+        color: #4DBDE5;
+    }
 `
 
 export default function Dropdown() {
+    const navigate = useNavigate();
     return (
         <Dropmenu>
             <ul>
-                <li>정보수정</li>
-                <li>로그아웃</li>
+                <li onClick={()=>{navigate('/modify')}}>정보수정</li>
+                <li onClick={()=>{navigate('/login')}}>로그아웃</li>
             </ul>
         </Dropmenu>
     );
