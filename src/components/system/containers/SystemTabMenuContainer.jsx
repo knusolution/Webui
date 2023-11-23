@@ -32,6 +32,16 @@ const Container = styled.div`
     border: 2px solid #4DBDE5;
     border-bottom: none;
   }
+  button {
+      padding: 5px 10px;
+      color: white;
+      background-color: #007FFF;
+      border: 1px solid #007FFF;
+      border-radius: 10px;
+      font-size: medium;
+      cursor: pointer;
+      float: right;
+    }
 `;
 
 export default function SystemTabMenuContainer() {
@@ -56,7 +66,9 @@ export default function SystemTabMenuContainer() {
         </ul>
 
         <AdminSearchContainer></AdminSearchContainer>
-
+        
+        <button>게시글 등록</button>
+        
         {tab === 0 ? (
           <TabMenuStandard></TabMenuStandard>
         ) : tab === 1 ? (
