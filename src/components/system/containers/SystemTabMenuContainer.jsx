@@ -4,6 +4,9 @@ import AdminSearchContainer from '@components/admin/containers/AdminSearchContai
 import TabMenuStandard from "./tabmenu/TabMenuStandard";
 import TabMenuConstructionContainer from "./tabmenu/TabMenuConstruction";
 import TabMenuDiagnostic from "./tabmenu/TabMenuDiagnostic ";
+import FileUploadTypeAModal from "@components/modals/FileUploadTypeAModal";
+import FileUploadTypeBModal from "@components/modals/FileUploadTypeBModal";
+import FileUploadTypeCModal from "@components/modals/FileUploadTypeCModal";
 
 const Container = styled.div`
   display: flex;
@@ -44,9 +47,16 @@ const Container = styled.div`
     }
 `;
 
+
 export default function SystemTabMenuContainer() {
     const menu = ['표준 정의서', '구축 정의서', '진단 보고서'];
     const [tab, setTab] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+
   return (
     <Container>
       <div>
@@ -67,8 +77,15 @@ export default function SystemTabMenuContainer() {
 
         <AdminSearchContainer></AdminSearchContainer>
         
-        <button>게시글 등록</button>
-        
+        <button onClick={openModal}>게시글 등록</button>
+
+        {isModalOpen && (
+          <>
+            {tab === 0 && <FileUploadTypeAModal closeModal={() => setIsModalOpen(false)} />}
+            {tab === 1 && <FileUploadTypeBModal closeModal={() => setIsModalOpen(false)} />}
+            {tab === 2 && <FileUploadTypeCModal closeModal={() => setIsModalOpen(false)} />}
+          </>
+        )}
         {tab === 0 ? (
           <TabMenuStandard></TabMenuStandard>
         ) : tab === 1 ? (
@@ -80,4 +97,3 @@ export default function SystemTabMenuContainer() {
     </Container>
   );
 }
-
