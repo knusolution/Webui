@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import uploadFile from './FileUploadService';
 
 const ModalOverlay = styled.div`
   &.modal-overlay{
@@ -164,6 +166,34 @@ const FileUpload = styled.div`
 `;
 
 const FileUploadModalTypeAContainer = ({ closeModal }) => {
+  const [selectedOption, setSelectedOption] = useState('');
+  const [file, setFile] = useState(null);
+
+  const handleRadioChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async () => {
+    if(!selectedOption || !file) {
+      alert('모든 항목을 입력해주세요');
+      return;
+    }
+
+    const token = localStorage.getItem('userToken');
+
+    try{
+      await uploadFile(selectedOption, file, token);
+      alert('파일 업로드가 완료되었습니다.');
+      closeModal();
+    } catch (error) {
+      console.error('Error uploading file: ', error);
+    }
+  }
+
   return (
     <ModalOverlay className="modal-overlay" onClick={closeModal}>
       <ModalContainer className="modal-container" onClick={(e) => e.stopPropagation()}>
@@ -172,29 +202,29 @@ const FileUploadModalTypeAContainer = ({ closeModal }) => {
         <ModalContent>등록할 파일 종류를 선택하세요</ModalContent>
         <RadioGroup className="radio-group">
           <RadioButton className="radio-button">
-            <input type="radio" id="option1" name="FileType" value="option1" />
+            <input type="radio" id="option1" name="FileType" value="option1" onChange={handleRadioChange} />
             <label htmlFor="option1">DB 표준용어</label>
           </RadioButton>
           <RadioButton className="radio-button">
-            <input type="radio" id="option2" name="FileType" value="option2" />
+            <input type="radio" id="option2" name="FileType" value="option2" onChange={handleRadioChange} />
             <label htmlFor="option2">DB 표준도메인</label>
           </RadioButton>
           <RadioButton className="radio-button">
-            <input type="radio" id="option3" name="FileType" value="option3" />
+            <input type="radio" id="option3" name="FileType" value="option3" onChange={handleRadioChange} />
             <label htmlFor="option3">DB 표준단어</label>
           </RadioButton>
           <RadioButton className="radio-button">
-            <input type="radio" id="option4" name="FileType" value="option4" />
+            <input type="radio" id="option4" name="FileType" value="option4" onChange={handleRadioChange} />
             <label htmlFor="option4">DB 표준코드</label>
           </RadioButton>
         </RadioGroup>
         <FileUpload>
           <label>업로드 파일을 선택해주세요.</label>
-          <input type="file" />
+          <input type="file" onChange={handleFileChange} />
         </FileUpload>
         <ButtonGroup className="button-group">
           <button className="modal-group-button" onClick={closeModal}>취소</button>
-          <button className="modal-group-button">확인</button>
+          <button className="modal-group-button" onClick={handleSubmit}>확인</button>
         </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>

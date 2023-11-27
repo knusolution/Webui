@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import AdminSearchContainer from '@components/admin/containers/AdminSearchContainer';
 import TabMenuStandard from "./tabmenu/TabMenuStandard";
@@ -52,6 +52,14 @@ export default function SystemTabMenuContainer() {
     const menu = ['표준 정의서', '구축 정의서', '진단 보고서'];
     const [tab, setTab] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [systemName, setSystemName ] = useState('');
+
+    useEffect(() => {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if(userInfo && userInfo.systemName) {
+        setSystemName(userInfo.systemName);
+      }
+    }, []);
 
     const openModal = () => {
       setIsModalOpen(true);
@@ -60,7 +68,7 @@ export default function SystemTabMenuContainer() {
   return (
     <Container>
       <div>
-        <h3>경상북도 지도기반 통계정보시스템</h3>
+        <h3>{systemName || '시스템 이름 로딩 중...'}</h3>
         <ul>
           {menu.map((e, i) => (
             <li
