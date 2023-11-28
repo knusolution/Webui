@@ -56,22 +56,36 @@ const Navdiv = styled.div`
 const Admin = () => {
     const [view, setView] = useState(false);
     const navigate = useNavigate();
+    
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const isAdmin = userInfo && userInfo.role === "ADMIN";
+    const userName = userInfo ? userInfo.loginId : "User";
+
+    const handleLogoClick = () => {
+      if (isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/system");
+      }
+    };
     return (
       <Header>
         <Navdiv>
-          <Link to="/admin">
+          <a onClick={handleLogoClick}>
             <img src={logo} alt="logo.png" />
-          </Link>
+          </a>
 
           <nav>
-            <button onClick={()=>{navigate('/regist')}}>계정등록</button>
-
+            {isAdmin && (
+              <button onClick={()=>{navigate('/regist')}}>계정등록</button>
+            )}
+            
             <span
               onClick={() => {
                 setView(!view);
               }}
             >
-              JSON님 {view ? "∧" : "∨"}
+              {userName}님 {view ? "∧" : "∨"}
             </span>
             {view && <Dropdown></Dropdown>}
           </nav>

@@ -37,13 +37,13 @@ const Boarddiv = styled.div`
     width:20%;
   }
   th:nth-child(3) {
-    width: 10%;
+    width: 8%;
   }
   th:nth-child(4) {
-    width: 25%;
+    width: 20%;
   }
   th:nth-child(5) {
-    width: 15%;
+    width: 22%;
   }
   td {
     width:auto;
@@ -88,6 +88,9 @@ const Tbodytr = styled.tr`
 export default function AdminBorderContainer(props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const { title, data = [] } = props;
+  
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const isAdmin = userInfo && userInfo.role === "ADMIN";
 
   const cutFileName = (name, maxLength = 20) => {
     if(name.length > maxLength) {
@@ -133,12 +136,16 @@ export default function AdminBorderContainer(props) {
               </td>
               <td>{n.declineDetail}</td>
               <td>
-                <span>{n.declineFileName}</span>
+                <StyledLink href={n.declineFileUrl} target="_blank" rel="noopener noreferrer">
+                  {cutFileName(n.declineFileName)}
+                </StyledLink>
               </td>
               <td>
+                {isAdmin && (
                 <button onClick={() => setModalOpen(true)}>검토</button>
+                )}
                 {isModalOpen && (
-                  <CheckUploadModal closeModal={() => setModalOpen(false)} />
+                  <CheckUploadModal closeModal={() => setModalOpen(false)} articleId={n.articleId} />
                 )}
               </td>
             </Tbodytr>
