@@ -71,7 +71,7 @@ function DetailCategoryBoard({ category, index }) {
     const [totalPages, setTotalPages] = React.useState(0); 
 
     React.useEffect(() => {
-        SystemArticleService.fetchArticles(category.detailCategoryId, currentPage) // 임시 페이지 번호: 1
+        SystemArticleService.fetchArticles(category.detailCategoryId, currentPage)
             .then(articleData => {
                 setArticles(articleData.articles);
                 setTotalPages(articleData.allPage);
