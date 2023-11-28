@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
+
 const SidebarUL = styled.ul`
     list-style: none;
     padding-left: 1rem;
@@ -29,6 +30,14 @@ export default function Sidebar() {
         {name: "공지사항", path: "/admin"},
         {name: "경상북도 지도기반 통계정보시스템", path: "/system"}
     ];
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const userRole = userInfo?.role;
+
+    if (userRole !== "ADMIN") {
+      return null;
+    }
+
     return (
       <SidebarUL>
         {systemname.map((e, i) => (
