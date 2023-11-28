@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import ModifyService from '@components/modify/containers/ModifyService';
+import { useNavigate } from 'react-router-dom';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -106,7 +108,18 @@ const CloseButton = styled.button`
   }
 `;
 
-const ModifySysModalContainer = ({ closeModal }) => {
+const ModifySysModalContainer = ({ closeModal, userData}) => {
+  const navigate = useNavigate();
+  const handleUpdate = async () => {
+    try {
+      await ModifyService(userData);
+      closeModal();
+      navigate('/system');
+    }
+    catch (error) {
+      console.error('Failed to update:', error);
+    }
+  }
   return (
     <ModalOverlay onClick={closeModal}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -115,7 +128,7 @@ const ModifySysModalContainer = ({ closeModal }) => {
         <ModalContent>선택하신 시스템 정보를 수정 하시겠습니까?</ModalContent>
         <ButtonGroup>
           <button className="modal-group-button" onClick={closeModal}>취소하기</button>
-          <button className="modal-group-button">수정하기</button>
+          <button className="modal-group-button" onClick={handleUpdate}>수정하기</button>
         </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>
@@ -124,6 +137,7 @@ const ModifySysModalContainer = ({ closeModal }) => {
 
 ModifySysModalContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  userData: PropTypes.object.isRequired
 };
 
 
