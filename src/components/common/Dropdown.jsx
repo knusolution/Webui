@@ -32,11 +32,17 @@ const Dropmenu = styled.div`
 
 export default function Dropdown() {
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('userInfo');
+        navigate('/login');
+    };
+
     return (
         <Dropmenu>
             <ul>
                 <li onClick={()=>{navigate('/modify')}}>정보수정</li>
-                <li onClick={()=>{navigate('/login')}}>로그아웃</li>
+                <li onClick={handleLogout}>로그아웃</li>
             </ul>
         </Dropmenu>
     );
