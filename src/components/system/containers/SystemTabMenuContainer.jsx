@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import AdminSearchContainer from '@components/admin/containers/AdminSearchContainer';
-import TabMenuStandard from "./tabmenu/TabMenuStandard";
-import TabMenuConstructionContainer from "./tabmenu/TabMenuConstruction";
-import TabMenuDiagnostic from "./tabmenu/TabMenuDiagnostic ";
 import FileUploadModal from "@components/modals/FileUploadModal";
-import SystemNameService from "./SystemNameService";
-import SystemArticleService from "./SystemArticleService";
-import TabMenuContainer from "./tabmenu/TabMenuContainer";
+import SystemNameService from "@components/system/containers/SystemNameService";
+import SystemArticleService from "@components/system/containers/SystemArticleService";
+import TabMenuContainer from "@components/system/containers/tabmenu/TabMenuContainer";
 
 const Container = styled.div`
   display: flex;
@@ -74,43 +71,7 @@ export default function SystemTabMenuContainer() {
     }
   }, []);
 
-    // 시스템 ID가 변경되면 해당 시스템의 기본 카테고리를 가져온다.
-    // useEffect(() => {
-    //       if(systemId !== null) {
-    //           SystemNameService.fetchBaseCategory(systemId)
-    //               .then(data => {
-    //                   if (data && data.baseCategories && data.baseCategories.length > tab) {
-    //                       const baseCategoryId = data.baseCategories[tab].baseCategoryId;
-    //                       SystemArticleService.fetchDetailCategories(baseCategoryId)
-    //                           .then(detailData => {
-    //                               // 여기에서 detailData 처리
-    //                               console.log(detailData);
-    //                           })
-    //                           .catch(error => {
-    //                               console.error('Detail category 요청 오류:', error);
-    //                           });
-    //                   }
-    //               })
-    //               .catch(error => {
-    //                   console.error('Base category 요청 오류:', error);
-    //               });
-    //       }
-    //   }, [tab, systemId]);
     const [baseCategoryIds, setBaseCategoryIds] = useState([]);
-    // useEffect(() => {
-    //     if(systemId !== null) {
-    //         SystemNameService.fetchBaseCategory(systemId)
-    //             .then(data => {
-    //                 if (data && data.baseCategories) {
-    //                     setBaseCategoryIds(data.baseCategories.map(category => category.baseCategoryId));
-    //                 }
-    //             })
-    //             .catch(error => {
-    //                 console.error('Base category 요청 오류:', error);
-    //             });
-    //     }
-    // }, [systemId]);
-
     const [detailCategories, setDetailCategories] = useState([]);
 
     useEffect(() => {

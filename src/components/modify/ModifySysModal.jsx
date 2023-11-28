@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ModifySysModalContainer from './containers/ModifySysModalContainer';
+import ModifySysModalContainer from '@components/modify/containers/ModifySysModalContainer';
 
 
 const ModifySysModal = ({ closeModal }) => {

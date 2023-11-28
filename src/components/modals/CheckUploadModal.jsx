@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CheckUploadModalContainer from './containers/CheckUploadModalContainer';
+import CheckUploadModalContainer from '@components/modals/containers/CheckUploadModalContainer';
 
 
 const CheckUploadModal = ({ closeModal }) => {

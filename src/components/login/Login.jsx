@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "/assets/images/logo.png";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import LoginService from "./LoginService";
+import LoginService from "@components/login/LoginService";
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import FileUploadService from './FileUploadService';
+import FileUploadService from '@components/modals/containers/FileUploadService';  
 
 const ModalOverlay = styled.div`
   &.modal-overlay{
@@ -184,6 +184,7 @@ const FileUploadModalContainer = ({ closeModal, detailCategories }) => {
         .then(() => {
           // 업로드 성공 시 처리
           closeModal();
+          window.location.reload();
         })
         .catch(error => {
           // 업로드 실패 시 처리

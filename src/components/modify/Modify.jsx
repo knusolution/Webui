@@ -1,5 +1,5 @@
 import React from 'react';
-import ModifyBoardContainer from './containers/ModifyBoardContainer';
+import ModifyBoardContainer from '@components/modify/containers/ModifyBoardContainer';
 
 const Modify = () => {
   return (
