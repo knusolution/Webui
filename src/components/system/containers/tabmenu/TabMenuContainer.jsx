@@ -1,23 +1,102 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AdminBoardContainer from '@components/admin/containers/AdminBoardContainer';
-import SystemArticleService from '../SystemArticleService';
+import SystemArticleService from '@components/system/containers/SystemArticleService';
+import styled from 'styled-components';
+
+const PaginationContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+        &.pageButton {
+            background: none;
+            border: none;
+            color: black;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin: 0 5px;
+            text-decoration: none;
+
+            &:hover {
+            text-decoration: underline;
+            }
+
+            &:disabled {
+            color: grey;
+            }
+        }
+    }
+`;
+
+const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
+    const pageNumbers = [];
+
+    const pageRangeDisplayed = 2;
+
+    for (let i = Math.max(1, currentPage - pageRangeDisplayed); i <= Math.min(totalPages, currentPage + pageRangeDisplayed); i++) {
+        pageNumbers.push(i);
+    }
+
+  // 마지막 페이지와 현재 페이지 그룹 사이의 구분자 추가
+    if (currentPage + pageRangeDisplayed < totalPages) {
+        pageNumbers.push('...'); // 구분자
+        pageNumbers.push(totalPages); // 마지막 페이지
+    }
+
+    return (
+        <PaginationContainer>
+        {pageNumbers.map((page, index) => (
+            page === '...' ? (
+                <span key={index}>{page}</span>
+            ) : (
+            <button
+                className="pageButton"
+                key={page}
+                onClick={() => onPageChange(page)}
+                disabled={currentPage === page}
+            >
+            {page}
+          </button>
+        )
+      ))}
+    </PaginationContainer>
+  );
+};
 
 function DetailCategoryBoard({ category, index }) {
     const [articles, setArticles] = React.useState([]);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [totalPages, setTotalPages] = React.useState(0); 
 
     React.useEffect(() => {
-        SystemArticleService.fetchArticles(category.detailCategoryId, 1) // 임시 페이지 번호: 1
+        SystemArticleService.fetchArticles(category.detailCategoryId, currentPage) // 임시 페이지 번호: 1
             .then(articleData => {
                 setArticles(articleData.articles);
+                setTotalPages(articleData.allPage);
             })
             .catch(error => console.error('Articles 요청 오류:', error));
-    }, [category.detailCategoryId]);
+    }, [category.detailCategoryId, currentPage]);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
     return (
-        <AdminBoardContainer title={`${index}. ${category.detailCategoryName}`} data={articles} />
+        <div>
+            <AdminBoardContainer title={`${index}. ${category.detailCategoryName}`} data={articles} />
+            <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+            />
+        </div>
+        
+
     );
 }
+
 
 DetailCategoryBoard.propTypes = {
     category: PropTypes.shape({
@@ -52,4 +131,9 @@ TabMenuContainer.propTypes = {
         detailCategoryId: PropTypes.number,
         detailCategoryName: PropTypes.string
     }))
+};
+PaginationComponent.propTypes = {
+    currentPage: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired
 };
