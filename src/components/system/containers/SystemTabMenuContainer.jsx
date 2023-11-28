@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import AdminSearchContainer from '@components/admin/containers/AdminSearchContainer';
 import FileUploadModal from "@components/modals/FileUploadModal";
@@ -53,27 +54,46 @@ export default function SystemTabMenuContainer() {
     const [systemName, setSystemName ] = useState('');
     const [systemId, setSystemId] = useState(null);
 
-    // 로그인 정보를 이용한 시스템 이름 & 시스템 ID 가져오기
-    useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if(userInfo && userInfo.systemIds && userInfo.systemIds.length > 0) {
-      setSystemId(userInfo.systemIds[0]);
-      SystemNameService.fetchBaseCategory(userInfo.systemIds[0])
-        .then(data => {
-          console.log(data);
-          if (data && data.systemName) {
-            setSystemName(data.systemName);
-          }
-        })
-        .catch(error => {
-          console.error('Base category 요청 오류:', error);
-        });
-    }
-  }, []);
-
     const [baseCategoryIds, setBaseCategoryIds] = useState([]);
     const [detailCategories, setDetailCategories] = useState([]);
 
+    useEffect(() => {
+        // localStorage에서 userInfo 가져오기
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        let currentSystemId = userInfo?.systemIds?.[0]; // 기본 시스템 ID 설정
+
+        // ADMIN 사용자인 경우, 선택한 시스템 ID로 변경
+        if (userInfo?.role === "ADMIN") {
+            const selectedSystem = JSON.parse(localStorage.getItem("selectedSystemId"));
+            if (selectedSystem?.systemId) {
+                currentSystemId = selectedSystem.systemId;
+            }
+        }
+
+        // currentSystemId를 사용하여 시스템 이름 및 기타 정보 가져오기
+        if (currentSystemId) {
+            setSystemId(currentSystemId);
+            SystemNameService.fetchBaseCategory(currentSystemId)
+                .then(data => {
+                    if (data?.systemName) {
+                        setSystemName(data.systemName);
+                    }
+                    if (data?.baseCategories) {
+                        setBaseCategoryIds(data.baseCategories.map(category => category.baseCategoryId));
+                        // detailCategories 정보 가져오기
+                        Promise.all(data.baseCategories.map(category => 
+                            SystemArticleService.fetchDetailCategories(category.baseCategoryId)
+                        )).then(allDetailData => {
+                            setDetailCategories(allDetailData.map(data => data.detailCategories));
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Base category 요청 오류:', error);
+                });
+        }
+    }, []);
+    
     useEffect(() => {
         if (systemId !== null) {
             SystemNameService.fetchBaseCategory(systemId)
