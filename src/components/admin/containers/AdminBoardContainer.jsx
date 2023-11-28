@@ -59,12 +59,22 @@ const Tbodytr = styled.tr`
   align-items: center;
 `;
 
+const StyledLink = styled.a`
+  color: black;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 export default function AdminBorderContainer(props) {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { title, data } = props;
   return (
     <Boarddiv>
       <table>
-        <caption>{props.title}</caption>
+        <caption>{title}</caption>
         <thead>
           <tr>
             <th>차수</th>
@@ -77,11 +87,15 @@ export default function AdminBorderContainer(props) {
         </thead>
 
         <tbody>
-          {Data.map((n, i) => (
+          {data.map((n, i) => (
             <Tbodytr key={i}>
-              <td>{n.article_id}</td>
-              <td>{n.task_file_name}</td>
-              <td>{n.uploade_date}</td>
+              <td>{n.articleId}</td>
+              <td>
+                <StyledLink href={n.taskFileUrl} target="_blank" rel="noopener noreferrer">
+                  {n.taskFileName}
+                </StyledLink>
+              </td>
+              <td>{n.uploadDate}</td>
               <td>
                 {n.approval === "승인" ? (
                   <Approval></Approval>
@@ -91,9 +105,9 @@ export default function AdminBorderContainer(props) {
                   <Return></Return>
                 )}
               </td>
-              <td>{n.decline}</td>
+              <td>{n.declineDetail}</td>
               <td>
-                <span>{n.decline_file_name}</span>
+                <span>{n.declineFileName}</span>
                 <button onClick={() => setModalOpen(true)}>검토</button>
                 {isModalOpen && (
                   <CheckUploadModal closeModal={() => setModalOpen(false)} />

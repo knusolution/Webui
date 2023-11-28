@@ -1,9 +1,9 @@
 import { useState } from 'react';
-
+import axios from 'axios'
 import styled from 'styled-components';
 import modify from "/assets/images/modify.png";
 import RegistSysModal from '@components/regist/RegistSysModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 
 const PageContainer = styled.div`
@@ -165,8 +165,50 @@ const RequiredSpan = styled.span`
 `;
 
 const RegistBoardContainer = () => {
-    const [isModalOpen, setModalOpen] = useState(false);
+    // const [isModalOpen, setModalOpen] = useState(false);
+    const [inputValues, setInputValues] = useState({
+      systemName: '',
+      departmentName: '',
+      department:'',
+      companyName:'',
+      developerName:'',
+      contactNum:'',
+      loginId:'',
+    });
     const navigate = useNavigate();
+
+    const handleInputChange = (e) => {
+      //input 값이 변경될 때 호출되는 함수
+      const { name, value } = e.target;
+      setInputValues((prevValues) => ({
+        ...prevValues,
+        [name] : value,
+      }));
+    };
+
+    const handleSingUp = () => {
+      //입력 값이 비어있는지 확인
+      if (!inputValues.systemName || !inputValues.departmentName || !inputValues.companyName || !inputValues.department || !inputValues.developerName || !inputValues.contactNum || !inputValues.loginId)  {
+        alert('모든 값을 입력해주세요.');
+        return; // 등록을 못하게 만듦
+      }
+
+      //서버에 POST
+      console.log(JSON.stringify(inputValues))
+      axios.post('http://localhost:8080/join/user',JSON.stringify(inputValues), {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => {
+        console.log('Success:',response.data);
+        alert('시스템을 등록하였습니다.');
+      })
+      .catch(error => {
+        console.error('Error',error)
+      });
+    };
+
   return (
     <PageContainer>
       <Title>시스템 등록</Title>
@@ -176,32 +218,60 @@ const RegistBoardContainer = () => {
           <FormRow>
             <InputContainer>
               <RequiredSpan>시스템명</RequiredSpan>
-              <input type="text" placeholder="시스템명" />
+              <input type="text"
+                name = "systemName"
+                value={inputValues.systemName}
+                onChange={handleInputChange}
+                placeholder="시스템명"
+              />
             </InputContainer>
             <InputContainer>
               <RequiredSpan>시스템 담당자</RequiredSpan>
-              <input type="text" placeholder="시스템 담당자" />
+              <input type="text" 
+                name = "departmentName"
+                value={inputValues.departmentName}
+                onChange={handleInputChange}
+                placeholder="시스템 담당자" 
+              />
             </InputContainer>
             <InputContainer>
               <RequiredSpan>시스템 담당부서</RequiredSpan>
-              <input type="text" placeholder="시스템 담당부서" />
+              <input type="text" 
+                name = "department"
+                value={inputValues.department}
+                onChange={handleInputChange}
+                placeholder="시스템 담당부서" 
+              />
             </InputContainer>
           </FormRow>
           <FormRow>
               <InputContainer>
                   <span>업체명</span>
-                  <input type="text" placeholder="업체명" />
+                  <input type="text" 
+                    name = "companyName"
+                    value={inputValues.companyName}
+                    onChange={handleInputChange}
+                    placeholder="업체명" 
+                  />
               </InputContainer>
               <InputContainer>
                   <RequiredSpan>담당자</RequiredSpan>
-                  <input type="text" placeholder="담당자" />
+                  <input type="text" 
+                    name = "developerName"
+                    value={inputValues.developerName}
+                    onChange={handleInputChange}
+                    placeholder="담당자" 
+                />
               </InputContainer>
               <InputContainer>
                   <RequiredSpan>담당자 연락처</RequiredSpan>
                   <InputRow>
-                      <input type="text" placeholder="담당자 연락처" />
-                      <input type="text" placeholder="0000" />
-                      <input type="text" placeholder="0000" />
+                      <input type="text" 
+                        name = "contactNum"
+                        value={inputValues.contactNum}
+                        onChange={handleInputChange}
+                        placeholder="000-0000-0000" 
+                      />
                   </InputRow>
                   
               </InputContainer>
@@ -209,7 +279,12 @@ const RegistBoardContainer = () => {
           <FormRow>
               <InputContainer>
                   <RequiredSpan>아이디</RequiredSpan>
-                  <input type="text" placeholder="아이디"/>
+                  <input type="text" 
+                  name = "loginId"
+                  value={inputValues.loginId}
+                  onChange={handleInputChange}
+                  placeholder="아이디"
+                  />
                   <p>임시 비밀번호는 '아이디' 입니다.</p>
               </InputContainer>
               <InputContainer>
@@ -227,9 +302,9 @@ const RegistBoardContainer = () => {
           </FormRow>
         </Form>
         <ButtonGroup>
-          <button className="group-button" onClick={()=> {navigate(-1)}}>취소</button>
-          <button className="group-button" onClick={() => setModalOpen(true)}>등록하기</button>
-        {isModalOpen && <RegistSysModal closeModal={() => setModalOpen(false)} />}
+          <button className="group-button"  onClick={()=> {navigate(-1)}}>취소</button>
+          <button className="group-button" onClick={handleSingUp}>등록하기</button>
+        {/* {isModalOpen && <RegistSysModal closeModal={() => setModalOpen(false)} />} */}
         </ButtonGroup>
       </Container>
     </PageContainer>
