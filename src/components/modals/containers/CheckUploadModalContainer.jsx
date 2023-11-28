@@ -209,7 +209,7 @@ const TextArea = styled.textarea`
 const CheckUploadModalContainer = ({ closeModal, articleId }) => {
     const [approval, setApproval] = useState('');
     const [declineDetail, setDeclineDetail] = useState('');
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState("");
 
     const handleRadioChange = (event) => {
       setApproval(event.target.value);
@@ -232,10 +232,8 @@ const CheckUploadModalContainer = ({ closeModal, articleId }) => {
       formData.append('articleId', articleId);
       formData.append('approval', approval);
       formData.append('declineDetail', declineDetail);
-      if (file) {
-        formData.append('file', file);
-      }
-
+      formData.append('file', file ? file : "");
+      // 현재로서는 파일이 없으면 검토결과가 업로드되지않음
       try {
         await CheckUploadService.reviewArticle(formData);
         closeModal();
