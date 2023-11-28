@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "/assets/images/logo.png";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import LoginService from "./LoginService";
 
 const Container = styled.div`
   display: flex;
@@ -56,21 +57,60 @@ const LoginBox = styled.div`
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try{
+      const response = await LoginService.loginUser(username, password);
+      if(response) {
+        localStorage.setItem("userInfo", JSON.stringify(response.user));
+        
+        const userRole = response.user.role;
+        if (userRole === "ADMIN") {
+          navigate("/admin");
+        } else if (userRole === "USER") {
+          navigate("/system");
+        } else {
+          setError('알 수 없는 사용자 역할');
+        }
+      } else {
+        setError("로그인 실패: 잘못된 사용자 이름 또는 비밀번호");
+      }
+    } catch (error) {
+      console.error('로그인 실패: ',error);
+    }
+  };
+
   return (
     <Container>
       <LoginBox>
         <div>
           <img src={logo} alt="logo.png" />
-          <form>
-            <input type="text" placeholder="아이디" />
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="아이디"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
 
-            <input type="password" placeholder="비밀번호" />
+            <input
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-            <button onClick={()=> {navigate("/admin")}}>로그인</button>
+            <button type="submit">로그인</button>
           </form>
           <p>© 2023. (주)제이솔루션 all rights reserved.</p>
         </div>
       </LoginBox>
+      {error && <p>{error}</p>}
     </Container>
   );
 }
