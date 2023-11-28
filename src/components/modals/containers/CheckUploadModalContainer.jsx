@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import CheckUploadService from '@components/modals/containers/CheckUploadService';
 
 const ModalOverlay = styled.div`
   &.modal-overlay {
@@ -8,7 +10,7 @@ const ModalOverlay = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,7 +206,46 @@ const TextArea = styled.textarea`
   }
 `;
 
-const CheckUploadModalContainer = ({ closeModal }) => {
+const CheckUploadModalContainer = ({ closeModal, articleId }) => {
+    const [approval, setApproval] = useState('');
+    const [declineDetail, setDeclineDetail] = useState('');
+    const [file, setFile] = useState(null);
+
+    const handleRadioChange = (event) => {
+      setApproval(event.target.value);
+    };
+
+    const handleDetailChange = (event) => {
+      setDeclineDetail(event.target.value);
+    };
+
+    const handleFileChange = (event) => {
+      setFile(event.target.files[0]);
+    };
+
+    const handleSubmit = async () => {
+      if(!articleId) {
+        console.error("Article ID is not valid");
+        return;
+      }
+      const formData = new FormData();
+      formData.append('articleId', articleId);
+      formData.append('approval', approval);
+      formData.append('declineDetail', declineDetail);
+      if (file) {
+        formData.append('file', file);
+      }
+
+      try {
+        await CheckUploadService.reviewArticle(formData);
+        closeModal();
+        // 추가적인 성공 처리 로직
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        // 에러 처리 로직
+      }
+    };
+
   return (
     <ModalOverlay className="modal-overlay" onClick={closeModal}>
       <ModalContainer className="modal-container" onClick={(e) => e.stopPropagation()}>
@@ -213,23 +254,41 @@ const CheckUploadModalContainer = ({ closeModal }) => {
         <ModalContent>검토 결과를 선택하여 주세요</ModalContent>
         <RadioGroup className="radio-group">
           <RadioButton className="radio-button">
-            <input type="radio" id="option1" name="Result" value="option1" />
-            <label className="approve-label" htmlFor="option1">승인</label>
+            <input 
+              type="radio" 
+              id="approve"
+              name="Result"
+              value="승인"
+              onChange={handleRadioChange}
+              checked={ approval === "승인"}
+            />
+            <label className="approve-label" htmlFor="approve">승인</label>
           </RadioButton>
           <RadioButton className="radio-button">
-            <input type="radio" id="option2" name="Result" value="option2" />
-            <label className="reject-label" htmlFor="option2">반려</label>
+            <input 
+              type="radio"
+              id="reject"
+              name="Result"
+              value="반려"
+              onChange={handleRadioChange}
+              checked={ approval === "반려"}
+              />
+            <label className="reject-label" htmlFor="reject">반려</label>
           </RadioButton>
         </RadioGroup>
         <ModalContent>검토 결과 상세내역을 입력하여 주세요</ModalContent>
-        <TextArea placeholder="상세 내역을 입력하세요." />
+        <TextArea 
+          placeholder="상세 내역을 입력하세요." 
+          value={declineDetail}
+          onChange={handleDetailChange}
+        />
         <FileUpload>
           <label>업로드 파일을 선택해주세요.</label>
-          <input type="file" />
+          <input type="file" onChange={handleFileChange}/>
         </FileUpload>
         <ButtonGroup className="button-group">
           <button className="modal-group-button" onClick={closeModal}>취소</button>
-          <button className="modal-group-button">확인</button>
+          <button className="modal-group-button" onClick={handleSubmit}>확인</button>
         </ButtonGroup>
       </ModalContainer>
     </ModalOverlay>
@@ -238,6 +297,11 @@ const CheckUploadModalContainer = ({ closeModal }) => {
 
 CheckUploadModalContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  articleId: PropTypes.number
+};
+
+CheckUploadModalContainer.defaultProps = {
+  articleId: null
 };
 
 
