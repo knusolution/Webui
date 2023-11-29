@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import Data from "../../../Data.json";
+import PropTypes from "prop-types";
+// import Data from "../../../Data.json";
 import CheckUploadModal from "@components/modals/CheckUploadModal";
 
 const Boarddiv = styled.div`
@@ -24,23 +25,39 @@ const Boarddiv = styled.div`
     background-color: #f3f6f9;
   }
   th {
+    width: auto;
     text-align: left;
     padding: 7px 5px;
     font-weight: normal;
   }
-
+  th:first-child {
+    width: 22%;
+  }
+  th:nth-child(2){
+    width:20%;
+  }
+  th:nth-child(3) {
+    width: 8%;
+  }
+  th:nth-child(4) {
+    width: 20%;
+  }
+  th:nth-child(5) {
+    width: 22%;
+  }
   td {
+    width:auto;
     padding: 7px 5px;
   }
-
-  td:nth-child(4) {
+  td:nth-child(3) {
     /* color: ${(props) => (props.approval ? "반려" : "#FF0000")};
     color: ${(props) => (props.approval ? "대기" : "#E8840F")}; */
   }
 
   td:last-child {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    align-items: center;
   }
   button {
     padding: 2px 5px;
@@ -54,34 +71,59 @@ const Boarddiv = styled.div`
   }
 `;
 
+const StyledLink = styled.a`
+    color: black;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+`;
+
 const Tbodytr = styled.tr`
   border-bottom: 2px solid #e5eaf2;
   align-items: center;
 `;
 
 export default function AdminBorderContainer(props) {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const { title, data = [] } = props;
+  const [openModalArticleId, setopenModalArticleId] = useState(null);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const isAdmin = userInfo && userInfo.role === "ADMIN";
+
+  const cutFileName = (name, maxLength = 20) => {
+    if(name.length > maxLength) {
+      return `${name.substring(0, maxLength)}...`;
+    }
+    return name;
+  };
+
   return (
     <Boarddiv>
       <table>
-        <caption>{props.title}</caption>
+        <caption>{title}</caption>
         <thead>
           <tr>
-            <th>차수</th>
             <th>증빙자료명</th>
             <th>업로드 일시</th>
             <th>검토결과</th>
             <th>상세내역</th>
             <th>관련파일</th>
+             {/* <th>차수</th>  */}
+            <th></th>
           </tr>
         </thead>
 
         <tbody>
-          {Data.map((n, i) => (
+          {data.map((n, i) => (
             <Tbodytr key={i}>
-              <td>{n.article_id}</td>
-              <td>{n.task_file_name}</td>
-              <td>{n.uploade_date}</td>
+              
+              <td>
+                <StyledLink href={n.taskFileUrl} target="_blank" rel="noopener noreferrer">
+                  {cutFileName(n.taskFileName)}
+                </StyledLink>
+              </td>
+              <td>{n.uploadDate}</td>
               <td>
                 {n.approval === "승인" ? (
                   <Approval></Approval>
@@ -91,12 +133,19 @@ export default function AdminBorderContainer(props) {
                   <Return></Return>
                 )}
               </td>
-              <td>{n.decline}</td>
+              <td>{n.declineDetail}</td>
               <td>
-                <span>{n.decline_file_name}</span>
-                <button onClick={() => setModalOpen(true)}>검토</button>
-                {isModalOpen && (
-                  <CheckUploadModal closeModal={() => setModalOpen(false)} />
+                <StyledLink href={n.declineFileUrl} target="_blank" rel="noopener noreferrer">
+                  {cutFileName(n.declineFileName)}
+                </StyledLink>
+              </td>
+              {/* <td>{n.articleId}</td> */}
+              <td>
+                {isAdmin && (
+                <button onClick={() => setopenModalArticleId(n.articleId)}>검토</button>
+                )}
+                {openModalArticleId === n.articleId && (
+                  <CheckUploadModal closeModal={() => setopenModalArticleId(null)} articleId={n.articleId} />
                 )}
               </td>
             </Tbodytr>
@@ -118,3 +167,13 @@ function Wait() {
 function Return() {
   return <div style={{color:'#FF0000'}}>반려</div>;
 }
+
+AdminBorderContainer.propTypes = {
+  title: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.object)
+};
+
+AdminBorderContainer.defaultProps = {
+  title: "",
+  data: []
+};

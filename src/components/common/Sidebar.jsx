@@ -1,6 +1,7 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import SidebarSearchService from '@components/common/SidebarSearchService';
 
 const SidebarUL = styled.ul`
     list-style: none;
@@ -18,27 +19,57 @@ const SNavLink = styled(NavLink)`
     text-decoration: none;
     color: black;
     text-decoration: none;
-    &.active {
+    &.chosen {
         color: #4DBDE5;
     }
 `
 
 
 export default function Sidebar() {
-    const systemname = [
-        {name: "공지사항", path: "/admin"},
-        {name: "경상북도 지도기반 통계정보시스템", path: "/system"}
-    ];
-    return (
-      <SidebarUL>
-        {systemname.map((e, i) => (
-          <li key={i}>
-            <SNavLink to={e.path}>
-              {e.name}
-            </SNavLink>
-          </li>
-        ))}
-      </SidebarUL>
-    );
-}
+  const [systemNames, setSystemNames] = useState([]);
+  const [selectedSystemId, setSelectedSystemId] = useState(null);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userRole = userInfo?.role;
+  const location = useLocation();
 
+  useEffect(() => {
+    if (userRole === "ADMIN") {
+      SidebarSearchService.fetchSystemNames().then(names => {
+        setSystemNames([{ id: 'admin', name: '공지사항' }, ...names]);
+      });
+    }
+    // URL 경로 기반으로 선택된 시스템 ID 설정
+    const currentPath = location.pathname;
+    if (currentPath === "/admin") {
+      setSelectedSystemId("admin");
+    } else if (currentPath === "/system") {
+      const storedSystemId = JSON.parse(localStorage.getItem("selectedSystemId"))?.systemId;
+      setSelectedSystemId(storedSystemId);
+    }
+  }, [userRole, location.pathname]);
+
+  const handleSystemClick = (systemId) => {
+    setSelectedSystemId(systemId);
+    localStorage.setItem("selectedSystemId", JSON.stringify({ systemId }));
+    window.location.reload();
+  };
+
+  const isSelected = (systemId) => {
+    return systemId === selectedSystemId;
+  };
+
+  return (
+    <SidebarUL>
+      {systemNames.map((system) => (
+        <li key={system.id} onClick={() => handleSystemClick(system.id)}>
+          <SNavLink 
+            to={system.id === 'admin' ? '/admin' : '/system'}
+            className={isSelected(system.id) ? "chosen" : ""}
+          >
+            {system.name}
+          </SNavLink>
+        </li>
+      ))}
+    </SidebarUL>
+  );
+}

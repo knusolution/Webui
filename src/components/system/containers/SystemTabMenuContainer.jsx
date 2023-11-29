@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import AdminSearchContainer from '@components/admin/containers/AdminSearchContainer';
-import TabMenuStandard from "./tabmenu/TabMenuStandard";
-import TabMenuConstructionContainer from "./tabmenu/TabMenuConstruction";
-import TabMenuDiagnostic from "./tabmenu/TabMenuDiagnostic ";
+import FileUploadModal from "@components/modals/FileUploadModal";
+import SystemNameService from "@components/system/containers/SystemNameService";
+import SystemArticleService from "@components/system/containers/SystemArticleService";
+import TabMenuContainer from "@components/system/containers/tabmenu/TabMenuContainer";
 
 const Container = styled.div`
   display: flex;
@@ -44,13 +46,82 @@ const Container = styled.div`
     }
 `;
 
+
 export default function SystemTabMenuContainer() {
     const menu = ['표준 정의서', '구축 정의서', '진단 보고서'];
     const [tab, setTab] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [systemName, setSystemName ] = useState('');
+    const [systemId, setSystemId] = useState(null);
+
+    const [baseCategoryIds, setBaseCategoryIds] = useState([]);
+    const [detailCategories, setDetailCategories] = useState([]);
+
+    useEffect(() => {
+        // localStorage에서 userInfo 가져오기
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        let currentSystemId = userInfo?.systemIds?.[0]; // 기본 시스템 ID 설정
+
+        // ADMIN 사용자인 경우, 선택한 시스템 ID로 변경
+        if (userInfo?.role === "ADMIN") {
+            const selectedSystem = JSON.parse(localStorage.getItem("selectedSystemId"));
+            if (selectedSystem?.systemId) {
+                currentSystemId = selectedSystem.systemId;
+            }
+        }
+
+        // currentSystemId를 사용하여 시스템 이름 및 기타 정보 가져오기
+        if (currentSystemId) {
+            setSystemId(currentSystemId);
+            SystemNameService.fetchBaseCategory(currentSystemId)
+                .then(data => {
+                    if (data?.systemName) {
+                        setSystemName(data.systemName);
+                    }
+                    if (data?.baseCategories) {
+                        setBaseCategoryIds(data.baseCategories.map(category => category.baseCategoryId));
+                        // detailCategories 정보 가져오기
+                        Promise.all(data.baseCategories.map(category => 
+                            SystemArticleService.fetchDetailCategories(category.baseCategoryId)
+                        )).then(allDetailData => {
+                            setDetailCategories(allDetailData.map(data => data.detailCategories));
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Base category 요청 오류:', error);
+                });
+        }
+    }, []);
+    
+    useEffect(() => {
+        if (systemId !== null) {
+            SystemNameService.fetchBaseCategory(systemId)
+                .then(data => {
+                    if (data && data.baseCategories) {
+                        setBaseCategoryIds(data.baseCategories.map(category => category.baseCategoryId));
+                        // 모든 baseCategoryId에 대해 detailCategories 정보 가져오기
+                        Promise.all(data.baseCategories.map(category => 
+                            SystemArticleService.fetchDetailCategories(category.baseCategoryId)
+                        )).then(allDetailData => {
+                            setDetailCategories(allDetailData.map(data => data.detailCategories));
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Base category 요청 오류:', error);
+                });
+        }
+    }, [systemId]);
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+
   return (
     <Container>
       <div>
-        <h3>경상북도 지도기반 통계정보시스템</h3>
+        <h3>{systemName || '시스템 이름 로딩 중...'}</h3>
         <ul>
           {menu.map((e, i) => (
             <li
@@ -67,17 +138,23 @@ export default function SystemTabMenuContainer() {
 
         <AdminSearchContainer></AdminSearchContainer>
         
-        <button>게시글 등록</button>
-        
+        <button onClick={openModal}>게시글 등록</button>
+
+        {isModalOpen && (
+          <>
+            {tab === 0 && <FileUploadModal closeModal={() => setIsModalOpen(false)} detailCategories={detailCategories[0]} />}
+            {tab === 1 && <FileUploadModal closeModal={() => setIsModalOpen(false)} detailCategories={detailCategories[1]} />}
+            {tab === 2 && <FileUploadModal closeModal={() => setIsModalOpen(false)} detailCategories={detailCategories[2]} />}
+          </>
+        )}
         {tab === 0 ? (
-          <TabMenuStandard></TabMenuStandard>
+          <TabMenuContainer detailCategories={detailCategories[0]} />
         ) : tab === 1 ? (
-          <TabMenuConstructionContainer></TabMenuConstructionContainer>
+          <TabMenuContainer detailCategories={detailCategories[1]} />
         ) : (
-          <TabMenuDiagnostic></TabMenuDiagnostic>
+          <TabMenuContainer detailCategories={detailCategories[2]} />
         )}
       </div>
     </Container>
   );
 }
-

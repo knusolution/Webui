@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import CheckUploadService from '@components/modals/containers/CheckUploadService';
+import FileUploadService from '@components/modals/containers/FileUploadService';  
 
 const ModalOverlay = styled.div`
-  &.modal-overlay {
+  &.modal-overlay{
     position: fixed;
     top: 0;
     left: 0;
@@ -25,10 +25,10 @@ const ModalContainer = styled.div`
     padding: 0px;
     border-radius: 10px;
     width: 600px;
-    height: 700px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    height: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     position: relative;
-    &::after {
+      &::after {
       content: "";
       display: block;
       width: 100%;
@@ -38,8 +38,6 @@ const ModalContainer = styled.div`
       top: 50px;
     }
   }
-
-
 `;
 
 const ModalTitle = styled.h2`
@@ -69,8 +67,9 @@ const ButtonGroup = styled.div`
     left: 0;
     right: 0;
     width: auto;
-    .modal-group-button {
 
+    .modal-group-button {
+      padding: 10px 30px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -84,7 +83,7 @@ const ButtonGroup = styled.div`
         background-color: #7B91A7;
         color: black;
       }
-  
+
       &:last-child {
         margin-right: 0px;
         background-color: #003a75;
@@ -92,15 +91,12 @@ const ButtonGroup = styled.div`
       }
     }
   }
-
-  
-
 `;
 
 
 const CloseButton = styled.button`
 
-  &.modal-close-button {
+  &.ModalCloseButton {
     background-color: transparent;
     border: none;
     position: absolute;
@@ -123,11 +119,10 @@ const CloseButton = styled.button`
 const RadioGroup = styled.div`
   &.radio-group {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-top: -10px;
     margin-left: 20px;
     margin-bottom: 20px;
-    width: auto;
   }
 `;
 
@@ -136,19 +131,9 @@ const RadioButton = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    margin-right: 20px;
-    width: auto;
 
     label {
       margin-left: 10px;
-    }
-
-    .approve-label {
-      color: #4dd392;
-    }
-
-    .reject-label {
-      color: red;
     }
   }
 `;
@@ -180,111 +165,74 @@ const FileUpload = styled.div`
   }
 `;
 
-const TextArea = styled.textarea`
-  width: 80%;
-  height: 150px;
-  resize: none;
-  padding: 10px;
-  border: 1px solid #000000;
-  border-radius: 5px;
-  font-size: 14px;
-  margin-left: 20px;
-  margin-bottom: 20px;
- 
-  &:focus {
-    outline: none;
-    border-color: #007fff;
-  }
+const FileUploadModalContainer = ({ closeModal, detailCategories }) => {
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [file, setFile] = useState(null);
 
-  &::placeholder {
-    line-height: 150px;
-    text-indent: 35%;
-  }
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
 
-  &:not(:placeholder-shown) {
-    line-height: normal;
-  }
-`;
+  const handleRadioChange = (event) => {
+    setSelectedCategoryId(event.target.value);
+  };
 
-const CheckUploadModalContainer = ({ closeModal, articleId }) => {
-    const [approval, setApproval] = useState('');
-    const [declineDetail, setDeclineDetail] = useState('');
-    const [file, setFile] = useState("");
-
-    const handleRadioChange = (event) => {
-      setApproval(event.target.value);
-    };
-
-    const handleDetailChange = (event) => {
-      setDeclineDetail(event.target.value);
-    };
-
-    const handleFileChange = (event) => {
-      setFile(event.target.files[0]);
-    };
-
-    const handleSubmit = async () => {
-      if(!articleId) {
-        console.error("Article ID is not valid");
-        return;
-      }
-      const formData = new FormData();
-      formData.append('articleId', articleId);
-      formData.append('approval', approval);
-      formData.append('declineDetail', declineDetail);
-      formData.append('file', file);
-      // 현재로서는 파일이 없으면 검토결과가 업로드되지않음
-      try {
-        await CheckUploadService.reviewArticle(formData);
-        closeModal();
-        console.log(articleId,"번 게시글 검토 완료");
-        window.location.reload();
-        // 추가적인 성공 처리 로직
-      } catch (error) {
-        console.error('Error submitting review:', error);
-        // 에러 처리 로직
-      }
-    };
+  const handleSubmit = () => {
+    if (selectedCategoryId && file) {
+      // FileUploadService를 사용하여 파일 업로드
+      FileUploadService.uploadFile(selectedCategoryId, file)
+        .then(() => {
+          // 업로드 성공 시 처리
+          closeModal();
+          window.location.reload();
+        })
+        .catch(error => {
+          // 업로드 실패 시 처리
+          console.error('업로드 실패:', error);
+        });
+    }
+  };
 
   return (
     <ModalOverlay className="modal-overlay" onClick={closeModal}>
       <ModalContainer className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <CloseButton className="modal-close-button" onClick={closeModal}>&times;</CloseButton>
-        <ModalTitle>검토</ModalTitle>
-        <ModalContent>검토 결과를 선택하여 주세요</ModalContent>
+      <CloseButton className="ModalCloseButton" onClick={closeModal}>&times;</CloseButton>
+        <ModalTitle>파일 업로드</ModalTitle>
+        <ModalContent>등록할 파일 종류를 선택하세요</ModalContent>
+        {/* <RadioGroup className="radio-group">
+          <RadioButton className="radio-button">
+            <input type="radio" id="option1" name="FileType" value="option1" />
+            <label htmlFor="option1">데이터베이스 정의서</label>
+          </RadioButton>
+          <RadioButton className="radio-button">
+            <input type="radio" id="option2" name="FileType" value="option2" />
+            <label htmlFor="option2">테이블 정의서</label>
+          </RadioButton>
+          <RadioButton className="radio-button">
+            <input type="radio" id="option3" name="FileType" value="option3" />
+            <label htmlFor="option3">컬럼 정의서</label>
+          </RadioButton>
+          <RadioButton className="radio-button">
+            <input type="radio" id="option4" name="FileType" value="option4" />
+            <label htmlFor="option4">ERD & 관계정의서</label>
+          </RadioButton> */}
         <RadioGroup className="radio-group">
-          <RadioButton className="radio-button">
-            <input 
-              type="radio" 
-              id="approve"
-              name="Result"
-              value="승인"
-              onChange={handleRadioChange}
-              checked={ approval === "승인"}
-            />
-            <label className="approve-label" htmlFor="approve">승인</label>
-          </RadioButton>
-          <RadioButton className="radio-button">
-            <input 
+        {detailCategories.map((category, index) => (
+          <RadioButton key={category.detailCategoryId} className="radio-button">
+            <input
               type="radio"
-              id="reject"
-              name="Result"
-              value="반려"
+              id={`option${index + 1}`}
+              name="FileType"
+              value={category.detailCategoryId}
               onChange={handleRadioChange}
-              checked={ approval === "반려"}
-              />
-            <label className="reject-label" htmlFor="reject">반려</label>
+            />
+            <label htmlFor={`option${index + 1}`}>{category.detailCategoryName}</label>
           </RadioButton>
+        ))}
         </RadioGroup>
-        <ModalContent>검토 결과 상세내역을 입력하여 주세요</ModalContent>
-        <TextArea 
-          placeholder="상세 내역을 입력하세요." 
-          value={declineDetail}
-          onChange={handleDetailChange}
-        />
         <FileUpload>
           <label>업로드 파일을 선택해주세요.</label>
-          <input type="file" onChange={handleFileChange}/>
+          <input type="file" onChange={handleFileChange} />
         </FileUpload>
         <ButtonGroup className="button-group">
           <button className="modal-group-button" onClick={closeModal}>취소</button>
@@ -295,14 +243,10 @@ const CheckUploadModalContainer = ({ closeModal, articleId }) => {
   );
 };
 
-CheckUploadModalContainer.propTypes = {
+FileUploadModalContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  articleId: PropTypes.number.isRequired
+  detailCategories: PropTypes.array.isRequired
 };
 
-// CheckUploadModalContainer.defaultProps = {
-//   articleId: null
-// };
 
-
-export default CheckUploadModalContainer;
+export default FileUploadModalContainer;

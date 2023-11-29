@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import modify from "/assets/images/modify.png";
 import ModifySysModal from '@components/modify/ModifySysModal';
 import { useNavigate } from 'react-router-dom';
+import SystemNameService from '@components/system/containers/SystemNameService';
+
 
 
 const PageContainer = styled.div`
@@ -124,10 +126,10 @@ const InputContainer = styled.label`
 
 `;
 
-const InputRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
+// const InputRow = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+// `;
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -165,8 +167,60 @@ const RequiredSpan = styled.span`
 `;
 
 const ModifyBoardContainer = () => {
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
+    const [systemName, setSystemName] = useState("");
+    const [departmentName, setDepartmentName] = useState(userInfo.departmentName || "");
+    const [department, setDepartment] = useState(userInfo.department || "");
+    const [companyName, setCompanyName] = useState(userInfo.companyName || "");
+    const [developerName, setDeveloperName] = useState(userInfo.developerName || "");
+    const [contactNum, setContactNum] = useState(userInfo.contactNum || "");
+    const [password, setPassword] = useState("");
+    const [passwordCheck, setPasswordCheck] = useState("");
+    const [loginId] = useState(userInfo.loginId || "");
+    let currentSystemId = userInfo?.systemIds?.[0];
+    
+    useEffect(() => {
+      SystemNameService.fetchBaseCategory(currentSystemId)
+        .then(data => {
+          if (data && data.systemName) {
+            setSystemName(data.systemName);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching system name:', error);
+        });
+    }, []);
+
+    const validateForm = () => {
+      if( !systemName || !departmentName || !department || !developerName || !contactNum || !password || !passwordCheck) {
+        alert("모든 항목을 입력해주세요.");
+        return false;
+      }
+
+      if(password !== passwordCheck) {
+        alert("비밀번호가 일치하지 않습니다.");
+        return false;
+      }
+
+
+      return true;
+    };
+
+    const handleUpdateClick = () => {
+      if(!validateForm()) {
+        return;
+      }
+
+      setModalOpen(true);
+    };
+    
+    const handleInputChange = (setter) => (e) => {
+      setter(e.target.value);
+    };
+
   return (
     <PageContainer>
       <Title>정보 수정</Title>
@@ -176,45 +230,85 @@ const ModifyBoardContainer = () => {
           <FormRow>
             <InputContainer>
               <RequiredSpan>시스템명</RequiredSpan>
-              <input type="text" placeholder="시스템명" />
+              <input 
+                type="text" 
+                placeholder={userInfo.systemName || "시스템명"}
+                value={systemName}
+                onChange={handleInputChange(setSystemName)}
+              />
             </InputContainer>
             <InputContainer>
               <RequiredSpan>시스템 담당자</RequiredSpan>
-              <input type="text" placeholder="시스템 담당자" />
+              <input 
+                type="text" 
+                placeholder={userInfo.departmentName || "시스템 담당자"}
+                value={departmentName}
+                onChange={handleInputChange(setDepartmentName)}
+              />
             </InputContainer>
             <InputContainer>
               <RequiredSpan>시스템 담당부서</RequiredSpan>
-              <input type="text" placeholder="시스템 담당부서" />
+              <input 
+                type="text" 
+                placeholder={userInfo.department || "시스템 담당부서"}
+                value={department}
+                onChange={handleInputChange(setDepartment)}
+              />
             </InputContainer>
           </FormRow>
           <FormRow>
               <InputContainer>
                   <span>업체명</span>
-                  <input type="text" placeholder="업체명" />
+                  <input 
+                    type="text" 
+                    placeholder={userInfo.companyName || "업체명"}
+                    value={companyName}
+                    onChange={handleInputChange(setCompanyName)}
+                  />
               </InputContainer>
               <InputContainer>
                   <RequiredSpan>담당자</RequiredSpan>
-                  <input type="text" placeholder="담당자" />
+                  <input 
+                    type="text" 
+                    placeholder={userInfo.developerName || "담당자"}
+                    value={developerName}
+                    onChange={handleInputChange(setDeveloperName)}
+                    />
               </InputContainer>
               <InputContainer>
                   <RequiredSpan>담당자 연락처</RequiredSpan>
-                  <InputRow>
+                  {/* <InputRow>
                       <input type="text" placeholder="담당자 연락처" />
                       <input type="text" placeholder="0000" />
                       <input type="text" placeholder="0000" />
-                  </InputRow>
-                  
+                  </InputRow> */}
+                  <input
+                    type="text" 
+                    placeholder={userInfo.contactNum || "담당자 연락처"}
+                    value={contactNum}
+                    onChange={handleInputChange(setContactNum)}
+                  />
               </InputContainer>
           </FormRow>
           <FormRow>
               <InputContainer>
                   <RequiredSpan>아이디</RequiredSpan>
-                  <input type="text" placeholder="test-company" disabled/>
+                  <input 
+                    type="text" 
+                    placeholder={userInfo.loginId || "아이디" }
+                    value={loginId}
+                    disabled
+                  />
                   <p>아이디는 수정이 불가능합니다.</p>
               </InputContainer>
               <InputContainer>
                   <RequiredSpan>비밀번호</RequiredSpan>
-                  <input type="text" placeholder="비밀번호" />
+                  <input 
+                    type="password" 
+                    placeholder="비밀번호"
+                    value={password}
+                    onChange={handleInputChange(setPassword)}
+                  />
               </InputContainer>
               <InputContainer>
               </InputContainer>
@@ -224,7 +318,12 @@ const ModifyBoardContainer = () => {
               </InputContainer>
               <InputContainer>
                   <RequiredSpan>비밀번호 확인</RequiredSpan>
-                  <input type="text" placeholder="비밀번호 확인" />
+                  <input 
+                    type="password" 
+                    placeholder="비밀번호 확인" 
+                    value={passwordCheck}
+                    onChange={handleInputChange(setPasswordCheck)}
+                  />
               </InputContainer>
               <InputContainer>
               </InputContainer>
@@ -232,8 +331,20 @@ const ModifyBoardContainer = () => {
         </Form>
         <ButtonGroup>
           <button className="group-button" onClick={() => {navigate(-1)}}>취소</button>
-          <button className="group-button" onClick={() => setModalOpen(true)}>수정하기</button>
-        {isModalOpen && <ModifySysModal closeModal={() => setModalOpen(false)} />}
+          <button className="group-button" onClick={handleUpdateClick}>수정하기</button>
+        {isModalOpen && <ModifySysModal 
+          closeModal={() => setModalOpen(false)} 
+          userData={{
+            systemName,
+            departmentName,
+            department,
+            companyName,
+            developerName,
+            contactNum,
+            password,
+            loginId
+          }}
+          />}
         </ButtonGroup>
       </Container>
     </PageContainer>
