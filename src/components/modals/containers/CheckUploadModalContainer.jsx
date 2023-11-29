@@ -232,11 +232,13 @@ const CheckUploadModalContainer = ({ closeModal, articleId }) => {
       formData.append('articleId', articleId);
       formData.append('approval', approval);
       formData.append('declineDetail', declineDetail);
-      formData.append('file', file ? file : "");
+      formData.append('file', file);
       // 현재로서는 파일이 없으면 검토결과가 업로드되지않음
       try {
         await CheckUploadService.reviewArticle(formData);
         closeModal();
+        console.log(articleId,"번 게시글 검토 완료");
+        window.location.reload();
         // 추가적인 성공 처리 로직
       } catch (error) {
         console.error('Error submitting review:', error);
@@ -295,12 +297,12 @@ const CheckUploadModalContainer = ({ closeModal, articleId }) => {
 
 CheckUploadModalContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  articleId: PropTypes.number
+  articleId: PropTypes.number.isRequired
 };
 
-CheckUploadModalContainer.defaultProps = {
-  articleId: null
-};
+// CheckUploadModalContainer.defaultProps = {
+//   articleId: null
+// };
 
 
 export default CheckUploadModalContainer;

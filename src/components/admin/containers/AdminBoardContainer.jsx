@@ -86,9 +86,8 @@ const Tbodytr = styled.tr`
 `;
 
 export default function AdminBorderContainer(props) {
-  const [isModalOpen, setModalOpen] = useState(false);
   const { title, data = [] } = props;
-  
+  const [openModalArticleId, setopenModalArticleId] = useState(null);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const isAdmin = userInfo && userInfo.role === "ADMIN";
 
@@ -105,12 +104,12 @@ export default function AdminBorderContainer(props) {
         <caption>{title}</caption>
         <thead>
           <tr>
-            {/* <th>차수</th> */}
             <th>증빙자료명</th>
             <th>업로드 일시</th>
             <th>검토결과</th>
             <th>상세내역</th>
             <th>관련파일</th>
+             {/* <th>차수</th>  */}
             <th></th>
           </tr>
         </thead>
@@ -118,7 +117,7 @@ export default function AdminBorderContainer(props) {
         <tbody>
           {data.map((n, i) => (
             <Tbodytr key={i}>
-              {/* <td>{n.articleId}</td> */}
+              
               <td>
                 <StyledLink href={n.taskFileUrl} target="_blank" rel="noopener noreferrer">
                   {cutFileName(n.taskFileName)}
@@ -140,12 +139,13 @@ export default function AdminBorderContainer(props) {
                   {cutFileName(n.declineFileName)}
                 </StyledLink>
               </td>
+              {/* <td>{n.articleId}</td> */}
               <td>
                 {isAdmin && (
-                <button onClick={() => setModalOpen(true)}>검토</button>
+                <button onClick={() => setopenModalArticleId(n.articleId)}>검토</button>
                 )}
-                {isModalOpen && (
-                  <CheckUploadModal closeModal={() => setModalOpen(false)} articleId={n.articleId} />
+                {openModalArticleId === n.articleId && (
+                  <CheckUploadModal closeModal={() => setopenModalArticleId(null)} articleId={n.articleId} />
                 )}
               </td>
             </Tbodytr>
