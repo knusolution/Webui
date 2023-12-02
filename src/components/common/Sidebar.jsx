@@ -7,7 +7,6 @@ const ToggleButton = styled.button`
   top: 50%;  // 중앙에 위치
   transform: translateY(-50%);  // 정확한 중앙 정렬을 위해
   left: ${({ isVisible }) => isVisible ? '200px' : '0px'};  // isVisible에 따라 위치 조정
-  z-index: 100;  // 레이어 순서
   background-color: #f8f8f8;  // 배경색
   border: none;  // 테두리 없앰
   border-radius: 5px;  // 둥근 모서리
