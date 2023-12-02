@@ -14,6 +14,7 @@ const Header = styled.div`
   img {
     height: auto;
     width: 200px;
+    cursor: pointer;
   }
 
   nav {
