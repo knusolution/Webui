@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from 'styled-components';
 import SidebarContainer from '@components/common/containers/SidebarContainer';
 
@@ -29,12 +29,20 @@ const ToggleButton = styled.button`
 
 export default function Sidebar() {
   const [isVisible, setIsVisible] = useState(true);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    setUserRole(userInfo?.role);
+  }, []);
 
   return (
     <>
-      <ToggleButton isVisible={isVisible} onClick={() => setIsVisible(!isVisible)}>
-        {isVisible ? '<' : '>'}
-      </ToggleButton>
+      {userRole === 'ADMIN' && (
+        <ToggleButton isVisible={isVisible} onClick={() => setIsVisible(!isVisible)}>
+          {isVisible ? '<' : '>'}
+        </ToggleButton>
+      )}
       {isVisible && <SidebarContainer />}
     </>
   );
