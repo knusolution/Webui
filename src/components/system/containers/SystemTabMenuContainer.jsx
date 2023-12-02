@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import AdminSearchContainer from '@components/admin/containers/AdminSearchContainer';
 import FileUploadModal from "@components/modals/FileUploadModal";
-import SystemNameService from "@components/system/containers/SystemNameService";
-import SystemArticleService from "@components/system/containers/SystemArticleService";
+import ApiService from "@components/axios/ApiService";
 import TabMenuContainer from "@components/system/containers/tabmenu/TabMenuContainer";
 
 const Container = styled.div`
@@ -73,7 +72,7 @@ export default function SystemTabMenuContainer() {
         // currentSystemId를 사용하여 시스템 이름 및 기타 정보 가져오기
         if (currentSystemId) {
             setSystemId(currentSystemId);
-            SystemNameService.fetchBaseCategory(currentSystemId)
+            ApiService.fetchBaseCategory(currentSystemId)
                 .then(data => {
                     if (data?.systemName) {
                         setSystemName(data.systemName);
@@ -82,7 +81,7 @@ export default function SystemTabMenuContainer() {
                         setBaseCategoryIds(data.baseCategories.map(category => category.baseCategoryId));
                         // detailCategories 정보 가져오기
                         Promise.all(data.baseCategories.map(category => 
-                            SystemArticleService.fetchDetailCategories(category.baseCategoryId)
+                            ApiService.fetchDetailCategories(category.baseCategoryId)
                         )).then(allDetailData => {
                             setDetailCategories(allDetailData.map(data => data.detailCategories));
                         });
@@ -96,13 +95,13 @@ export default function SystemTabMenuContainer() {
     
     useEffect(() => {
         if (systemId !== null) {
-            SystemNameService.fetchBaseCategory(systemId)
+            ApiService.fetchBaseCategory(systemId)
                 .then(data => {
                     if (data && data.baseCategories) {
                         setBaseCategoryIds(data.baseCategories.map(category => category.baseCategoryId));
                         // 모든 baseCategoryId에 대해 detailCategories 정보 가져오기
                         Promise.all(data.baseCategories.map(category => 
-                            SystemArticleService.fetchDetailCategories(category.baseCategoryId)
+                            ApiService.fetchDetailCategories(category.baseCategoryId)
                         )).then(allDetailData => {
                             setDetailCategories(allDetailData.map(data => data.detailCategories));
                         });

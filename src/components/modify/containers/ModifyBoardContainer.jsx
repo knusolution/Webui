@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import modify from "/assets/images/modify.png";
 import ModifySysModal from '@components/modify/ModifySysModal';
 import { useNavigate } from 'react-router-dom';
-import SystemNameService from '@components/system/containers/SystemNameService';
+import ApiService from '@components/axios/ApiService';
 
 
 
@@ -183,7 +183,7 @@ const ModifyBoardContainer = () => {
     let currentSystemId = userInfo?.systemIds?.[0];
     
     useEffect(() => {
-      SystemNameService.fetchBaseCategory(currentSystemId)
+      ApiService.fetchBaseCategory(currentSystemId)
         .then(data => {
           if (data && data.systemName) {
             setSystemName(data.systemName);

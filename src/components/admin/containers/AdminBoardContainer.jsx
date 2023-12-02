@@ -98,10 +98,6 @@ export default function AdminBorderContainer(props) {
     return name;
   };
 
-  const processFilePath = (filePath) => {
-  return filePath.replace("localhost:5173", "");
-};
-
   return (
     <Boarddiv>
       <table>
@@ -123,7 +119,7 @@ export default function AdminBorderContainer(props) {
             <Tbodytr key={i}>
               
               <td>
-                <StyledLink href={processFilePath(n.taskFileUrl)} target="_blank" rel="noopener noreferrer">
+                <StyledLink href={n.taskFileUrl} target="_blank" rel="noopener noreferrer">
                   {cutFileName(n.taskFileName)}
                 </StyledLink>
               </td>

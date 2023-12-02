@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import SidebarSearchService from '@components/common/SidebarSearchService';
+import ApiService from '@components/axios/ApiService';
 
 const SidebarUL = styled.ul`
     list-style: none;
@@ -34,7 +34,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (userRole === "ADMIN") {
-      SidebarSearchService.fetchSystemNames().then(names => {
+      ApiService.fetchSystemNames().then(names => {
         setSystemNames([{ id: 'admin', name: '공지사항' }, ...names]);
       });
     }

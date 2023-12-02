@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import CheckUploadService from '@components/modals/containers/CheckUploadService';
+import ApiService from '@components/axios/ApiService';
 
 const ModalOverlay = styled.div`
   &.modal-overlay {
@@ -235,7 +235,7 @@ const CheckUploadModalContainer = ({ closeModal, articleId }) => {
       formData.append('file', file);
       // 현재로서는 파일이 없으면 검토결과가 업로드되지않음
       try {
-        await CheckUploadService.reviewArticle(formData);
+        await ApiService.reviewArticle(formData);
         closeModal();
         console.log(articleId,"번 게시글 검토 완료");
         window.location.reload();
