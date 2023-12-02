@@ -4,7 +4,7 @@ import axios from 'axios';
 const AdminArticleService = {
     fetchArticles: async (page) => {
         try {
-            const response = await axios.get('http://localhost:8080/wait-article', {
+            const response = await axios.get('http://54.166.160.145:8080/wait-article', {
                 params: { page }
             });
             console.log('Success fetching articles:', response);

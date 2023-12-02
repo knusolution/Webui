@@ -6,7 +6,7 @@ const FileUploadService = {
     formData.append('file', file);
     formData.append('detailCategoryId', detailCategoryId);
 
-    return axios.post('http://localhost:8080/article-file', formData, {
+    return axios.post('http://54.166.160.145:8080/article-file', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

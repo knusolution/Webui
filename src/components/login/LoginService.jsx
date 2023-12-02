@@ -3,7 +3,7 @@ import axios from 'axios';
 const LoginService = {
     loginUser: async (loginId, password) => {
         try {
-            const response = await axios.post('http://localhost:8080/users', {
+            const response = await axios.post('http://54.166.160.145:8080/users', {
                 loginId,
                 password
             });

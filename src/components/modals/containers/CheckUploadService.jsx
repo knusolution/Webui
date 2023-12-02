@@ -4,7 +4,7 @@ const CheckUploadService = {
     reviewArticle: async (formData) => {
         try {
             // PUT 요청을 보내는 부분
-            const response = await axios.put('http://localhost:8080/article-review', formData, {
+            const response = await axios.put('http://54.166.160.145:8080/article-review', formData, {
                 headers: {
                 'Content-Type': 'multipart/form-data'
                 }

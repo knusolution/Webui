@@ -341,8 +341,8 @@ const ModifyBoardContainer = () => {
             companyName,
             developerName,
             contactNum,
-            password,
-            loginId
+            loginId,
+            password
           }}
           />}
         </ButtonGroup>

@@ -195,7 +195,7 @@ const RegistBoardContainer = () => {
 
       //서버에 POST
       console.log(JSON.stringify(inputValues))
-      axios.post('http://localhost:8080/join/user',JSON.stringify(inputValues), {
+      axios.post('http://54.166.160.145:8080/join/user',JSON.stringify(inputValues), {
         headers: {
           'Content-Type': 'application/json',
         }
@@ -203,6 +203,7 @@ const RegistBoardContainer = () => {
       .then(response => {
         console.log('Success:',response.data);
         alert('시스템을 등록하였습니다.');
+        navigate('/admin');
       })
       .catch(error => {
         console.error('Error',error)

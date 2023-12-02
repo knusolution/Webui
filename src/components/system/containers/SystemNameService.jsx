@@ -3,7 +3,7 @@ import axios from 'axios';
 const SystemNameService = {
     fetchBaseCategory: async (systemId) => {
         try {
-            const response = await axios.get('http://localhost:8080/base-category', {
+            const response = await axios.get('http://54.166.160.145:8080/base-category', {
                 params: {
                     systemId
                 }
