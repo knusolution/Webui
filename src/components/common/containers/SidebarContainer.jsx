@@ -8,7 +8,8 @@ const SidebarUL = styled.ul`
     padding: 0 1rem;
     position: fixed;
     top: 25%;
-    width: 200px;  /* 너비 조정 */
+    z-index: 5;
+    width: 180px;  /* 너비 조정 */
     background-color: #f8f8f8;  /* 배경색 변경 */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);  /* 그림자 효과 추가 */
     border-radius: 10px;  /* 모서리 둥글게 */

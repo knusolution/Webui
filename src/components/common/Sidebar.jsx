@@ -6,8 +6,9 @@ const ToggleButton = styled.button`
   position: fixed;  // 고정 위치
   top: 50%;  // 중앙에 위치
   transform: translateY(-50%);  // 정확한 중앙 정렬을 위해
-  left: ${({ isVisible }) => isVisible ? '200px' : '0px'};  // isVisible에 따라 위치 조정
-  background-color: #f8f8f8;  // 배경색
+  left: ${({ isVisible }) => isVisible ? '202px' : '0px'};  // isVisible에 따라 위치 조정
+  z-index: 10;
+  background-color: #transparent;  // 배경색
   border: none;  // 테두리 없앰
   border-radius: 5px;  // 둥근 모서리
   padding: 10px;  // 패딩
@@ -29,11 +30,20 @@ const ToggleButton = styled.button`
 export default function Sidebar() {
   const [isVisible, setIsVisible] = useState(true);
   const [userRole, setUserRole] = useState(null);
+  const [selectedSystemId, setSelectedSystemId] = useState(null);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUserRole(userInfo?.role);
+
+    const storedSystemId = JSON.parse(localStorage.getItem("selectedSystemId"))?.systemId;
+    setSelectedSystemId(storedSystemId);
   }, []);
+
+  useEffect(() => {
+    // 선택된 시스템이 변경될 때 탭 상태 초기화
+    localStorage.removeItem('currentTab');
+  }, [selectedSystemId]);
 
   return (
     <>
