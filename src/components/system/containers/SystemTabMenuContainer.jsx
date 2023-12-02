@@ -57,6 +57,10 @@ export default function SystemTabMenuContainer() {
     const [detailCategories, setDetailCategories] = useState([]);
 
     useEffect(() => {
+        const savedTab = localStorage.getItem('currentTab');
+          if (savedTab !== null) {
+              setTab(Number(savedTab));
+          }
         // localStorage에서 userInfo 가져오기
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         let currentSystemId = userInfo?.systemIds?.[0]; // 기본 시스템 ID 설정
@@ -117,6 +121,12 @@ export default function SystemTabMenuContainer() {
       setIsModalOpen(true);
     };
 
+    const handleTabChange = (newTab) => {
+      setTab(newTab);
+      // 로컬 스토리지에 현재 탭 상태 저장
+      localStorage.setItem('currentTab', newTab);
+  };
+
   return (
     <Container>
       <div>
@@ -126,9 +136,7 @@ export default function SystemTabMenuContainer() {
             <li
               key={i}
               className={i === tab ? "focused" : null}
-              onClick={() => {
-                setTab(i);
-              }}
+              onClick={() => handleTabChange(i)}
             >
               {e}
             </li>
