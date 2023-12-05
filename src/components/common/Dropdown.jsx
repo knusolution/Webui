@@ -34,7 +34,7 @@ export default function Dropdown() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('userInfo');
+        localStorage.clear();
         navigate('/login');
     };
 

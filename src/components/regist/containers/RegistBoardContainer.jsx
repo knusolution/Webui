@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import axios from 'axios'
 import styled from 'styled-components';
 import modify from "/assets/images/modify.png";
-import RegistSysModal from '@components/regist/RegistSysModal';
+// import RegistSysModal from '@components/regist/RegistSysModal';
 import { useNavigate } from "react-router-dom";
+import ApiService from '@components/axios/ApiService';
 
 
 const PageContainer = styled.div`
@@ -194,19 +194,15 @@ const RegistBoardContainer = () => {
       }
 
       //서버에 POST
-      console.log(JSON.stringify(inputValues))
-      axios.post('http://localhost:8080/join/user',JSON.stringify(inputValues), {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-      .then(response => {
-        console.log('Success:',response.data);
-        alert('시스템을 등록하였습니다.');
-      })
-      .catch(error => {
-        console.error('Error',error)
-      });
+      ApiService.registerSystem(inputValues)
+        .then(response => {
+            console.log('Success:', response);
+            alert('시스템을 등록하였습니다.');
+            navigate('/admin');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     };
 
   return (

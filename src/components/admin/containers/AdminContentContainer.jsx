@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AdminBoardContainer from "@components/admin/containers/AdminBoardContainer";
-import AdminArticleService from '@components/admin/containers/AdminArticleService';
+import ApiService from '@components/axios/ApiService';
 
 
 const PaginationContainer = styled.div`
@@ -72,7 +72,7 @@ export default function AdminContentContainer() {
     const [totalPages, setTotalPages] = React.useState(0); 
 
     useEffect(() => {
-        AdminArticleService.fetchArticles(currentPage)
+        ApiService.fetchWaitArticles(currentPage)
             .then(articleData => {
                 setArticles(articleData.articles);
                 setTotalPages(articleData.allPage);

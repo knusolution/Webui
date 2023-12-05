@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import FileUploadService from '@components/modals/containers/FileUploadService';  
+import ApiService from '@components/axios/ApiService';  
 
 const ModalOverlay = styled.div`
   &.modal-overlay{
@@ -180,7 +180,7 @@ const FileUploadModalContainer = ({ closeModal, detailCategories }) => {
   const handleSubmit = () => {
     if (selectedCategoryId && file) {
       // FileUploadService를 사용하여 파일 업로드
-      FileUploadService.uploadFile(selectedCategoryId, file)
+      ApiService.uploadFile(selectedCategoryId, file)
         .then(() => {
           // 업로드 성공 시 처리
           closeModal();

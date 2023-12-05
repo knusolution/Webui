@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AdminBoardContainer from '@components/admin/containers/AdminBoardContainer';
-import SystemArticleService from '@components/system/containers/SystemArticleService';
+import ApiService from '@components/axios/ApiService';
 import styled from 'styled-components';
 
 const PaginationContainer = styled.div`
@@ -71,7 +71,7 @@ function DetailCategoryBoard({ category, index }) {
     const [totalPages, setTotalPages] = React.useState(0); 
 
     React.useEffect(() => {
-        SystemArticleService.fetchArticles(category.detailCategoryId, currentPage)
+        ApiService.fetchArticles(category.detailCategoryId, currentPage)
             .then(articleData => {
                 setArticles(articleData.articles);
                 setTotalPages(articleData.allPage);

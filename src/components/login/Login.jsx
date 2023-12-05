@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "/assets/images/logo.png";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import LoginService from "@components/login/LoginService";
+import ApiService from "@components/axios/ApiService";
 
 const Container = styled.div`
   display: flex;
@@ -65,7 +65,7 @@ export default function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     try{
-      const response = await LoginService.loginUser(username, password);
+      const response = await ApiService.loginUser(username, password);
       if(response) {
         localStorage.setItem("userInfo", JSON.stringify(response.user));
         

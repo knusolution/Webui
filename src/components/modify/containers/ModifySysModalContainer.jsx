@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import ModifyService from '@components/modify/containers/ModifyService';
+import ApiService from '@components/axios/ApiService';
 import { useNavigate } from 'react-router-dom';
 
 const ModalOverlay = styled.div`
@@ -112,7 +112,7 @@ const ModifySysModalContainer = ({ closeModal, userData}) => {
   const navigate = useNavigate();
   const handleUpdate = async () => {
     try {
-      await ModifyService(userData);
+      await ApiService.ModifyService(userData);
       closeModal();
       navigate('/system');
     }
