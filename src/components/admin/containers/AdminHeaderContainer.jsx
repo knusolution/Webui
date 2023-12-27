@@ -87,7 +87,6 @@ const Admin = () => {
           <nav>
             <SNavLink to="/notice">공지사항</SNavLink>
             <SNavLink to="/qna">QnA</SNavLink>
-            <SNavLink to="/system">시스템</SNavLink>
             {isAdmin && (
               <button
                 onClick={() => {
