@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "/assets/images/logo.png"
 import { useState } from "react";
 import styled from "styled-components";
@@ -22,6 +22,7 @@ const Header = styled.div`
     gap: 50px;
     align-items: center;
     position: relative;
+
     span {
       padding: 0;
       margin: 0;
@@ -53,6 +54,13 @@ const Navdiv = styled.div`
   max-width: 1000px;
 `;
 
+const SNavLink = styled(NavLink)`
+  text-decoration: none;
+  color: black;
+  &.active {
+    color: #4dbde5;
+  }
+`;
 
 const Admin = () => {
     const [view, setView] = useState(false);
@@ -77,10 +85,19 @@ const Admin = () => {
           </a>
 
           <nav>
+            <SNavLink to="/notice">공지사항</SNavLink>
+            <SNavLink to="/qna">QnA</SNavLink>
+            <SNavLink to="/system">시스템</SNavLink>
             {isAdmin && (
-              <button onClick={()=>{navigate('/regist')}}>계정등록</button>
+              <button
+                onClick={() => {
+                  navigate("/regist");
+                }}
+              >
+                계정등록
+              </button>
             )}
-            
+
             <span
               onClick={() => {
                 setView(!view);
